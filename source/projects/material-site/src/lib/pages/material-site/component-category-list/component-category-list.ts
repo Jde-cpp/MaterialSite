@@ -1,11 +1,12 @@
 import {Component, NgModule, OnDestroy, OnInit} from '@angular/core';
-import {MatCardModule} from '@angular/material';
+import {MatCardModule} from '@angular/material/card';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Params, RouterModule} from '@angular/router';
-import {DocumentationItems, SECTIONS} from '../../../shared/material-site/documentation-items/documentation-items';
+import {DocumentationItems, SECTIONS} from '../../shared/documentation-items/documentation-items';
 import {ComponentPageTitle} from '../page-title/page-title';
-import {SvgViewerModule} from '../../../shared/material-site/svg-viewer/svg-viewer';
+import {SvgViewerModule} from '../../shared/svg-viewer/svg-viewer';
 import {Observable, combineLatest, Subscription} from 'rxjs';
+import {NavigationFocusModule} from '../../shared/navigation-focus/navigation-focus';
 
 
 @Component({
@@ -38,14 +39,16 @@ export class ComponentCategoryList implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.routeParamSubscription.unsubscribe();
+    if (this.routeParamSubscription) {
+      this.routeParamSubscription.unsubscribe();
+    }
   }
 }
 
 @NgModule({
-  imports: [SvgViewerModule, MatCardModule, CommonModule, RouterModule],
+  imports: [CommonModule, SvgViewerModule, MatCardModule, RouterModule, NavigationFocusModule],
   exports: [ComponentCategoryList],
   declarations: [ComponentCategoryList],
-  providers: [DocumentationItems, ComponentPageTitle],
+  providers: [DocumentationItems],
 })
 export class ComponentCategoryListModule { }

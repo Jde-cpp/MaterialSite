@@ -22,22 +22,22 @@ export interface DocSection {
 const SettingsKey = 'settings';
 const AIKey = "ai";
 
-export const SECTIONS: {[key: string]: DocSection} = 
+export const SECTIONS: {[key: string]: DocSection} =
 {
 	[SettingsKey]: { name: 'Settings', summary: 'Settings for the site.' },
 	[AIKey]: { name: 'AI', summary: 'AI.' },
 };
 
 
-const DOCS: {[key: string]: DocCategory[]} = 
+const DOCS: { [key: string]: DocCategory[] } =
 {
-	[SettingsKey]: 
+	[SettingsKey]:
 	[
 		{id: 'applications',name: 'Applications',summary: 'View Applications.',items: []},
 		{id: 'logs',name: 'Logs',summary: 'View logs.',items: []},
 		{id: 'historian',name: 'Historian',summary: 'View historian.',items: []}
 	],
-	[AIKey]: 
+	[AIKey]:
 	[
 		{id: 'matrix',	name: 'Matrix', summary: 'View Matrixes.',items: []},
 		{id: 'features',name: 'Features',summary: 'View Features.', items: []},
@@ -47,7 +47,7 @@ const DOCS: {[key: string]: DocCategory[]} =
 
 for( let category of DOCS[SettingsKey] )
 {
-	for( let doc of category.items ) 
+	for( let doc of category.items )
 		doc.packageName = SettingsKey;
 }
 
@@ -58,30 +58,30 @@ const ALL_CATEGORIES = DOCS[SettingsKey].concat( DOCS[AIKey] ); //.concat( DOCS[
 @Injectable()
 export class DocumentationItems
 {
-	getCategories(section: string): DocCategory[] 
+	getCategories(section: string): DocCategory[]
   	{
 		return DOCS[section];
 	}
 
-	getItems(section: string): DocItem[] 
+	getItems(section: string): DocItem[]
 	{
 		if( section===SettingsKey )
 			return AllSettings;
 		return [];
 	}
 
-	getItemById(id: string, section: string): DocItem 
-	{
-		//const sectionLookup = section == WindowsKey || section == 'cdk' || section==SettingsKey ? section : 'material';
-		//var item = ALL_DOCS.find(doc => doc.id === id && doc.packageName == sectionLookup);
+  getItemById(id: string, section: string): DocItem | undefined
+  {
+		//const sectionLookup = section === 'cdk' ? 'cdk' : 'material';
+		//return ALL_DOCS.find(doc => doc.id === id && doc.packageName === sectionLookup);
 		let item = null;
 		if( !item )
 			console.error( "item==null" );
 		return item;
-	}
+}
 
-	getCategoryById(id: string): DocCategory 
-	{
+  getCategoryById(id: string): DocCategory | undefined
+  {
 		var item = ALL_CATEGORIES.find(c => c.id == id);
 		if( !item )
 			console.error( "item==null" );
