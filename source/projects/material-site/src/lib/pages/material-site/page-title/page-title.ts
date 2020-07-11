@@ -7,14 +7,14 @@ import {Title} from '@angular/platform-browser';
 @Injectable({providedIn: 'root'})
 export class ComponentPageTitle {
   _title = '';
-  _originalTitle = 'Angular Material UI component library';
+  _originalTitle = 'Jde UI component';
 
   get title(): string { return this._title; }
 
   set title(title: string) {
     this._title = title;
     if (title !== '') {
-      title = `${title} | Angular Material`;
+      title = `${title} | Jde`;
     } else {
       title = this._originalTitle;
     }
