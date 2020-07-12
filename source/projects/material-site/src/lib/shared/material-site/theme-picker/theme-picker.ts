@@ -94,18 +94,16 @@ export class ThemePicker implements OnInit, OnDestroy {
 
   selectTheme(themeName: string) {
     const theme = this.themes.find(currentTheme => currentTheme.name === themeName);
-
     if (!theme) {
       return;
     }
 
     this.currentTheme = theme;
 
-    if (theme.isDefault) {
+	 if (theme.isDefault)
       this.styleManager.removeStyle('theme');
-    } else {
+	 else
       this.styleManager.setStyle('theme', `assets/${theme.name}.css`);
-    }
 
     if (this.currentTheme) {
       this.liveAnnouncer.announce(`${theme.displayName} theme selected.`, 'polite', 3000);

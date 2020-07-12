@@ -10,8 +10,11 @@ export class StyleManager {
   /**
    * Set the stylesheet with the specified key.
    */
-  setStyle(key: string, href: string) {
-    getLinkElementForKey(key).setAttribute('href', href);
+  setStyle(key: string, href: string)
+  {
+	//console.log( `setStyle( ${key}, ${href})` );
+	 getLinkElementForKey(key).setAttribute('href', href);
+
   }
 
   /**
@@ -26,7 +29,9 @@ export class StyleManager {
 }
 
 function getLinkElementForKey(key: string) {
-  return getExistingLinkElementByKey(key) || createLinkElementWithKey(key);
+	let result = getExistingLinkElementByKey(key) || createLinkElementWithKey(key);
+	//console.log( result );
+	return result;
 }
 
 function getExistingLinkElementByKey(key: string) {
