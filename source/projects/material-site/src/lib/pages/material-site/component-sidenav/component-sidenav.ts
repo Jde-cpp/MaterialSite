@@ -8,38 +8,29 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {DocumentationItems} from '../../shared/documentation-items/documentation-items';
+import {DocumentationItems} from 'src/app/shared/material-site/documentation-items/documentation-items';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {ActivatedRoute, Params, RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {ComponentHeaderModule} from '../component-page-header/component-page-header';
-import {FooterModule} from '../../shared/footer/footer';
+import {FooterModule} from 'src/app/shared/material-site/footer/footer';
 import {combineLatest, Observable, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {
-  ComponentCategoryList,
-  ComponentCategoryListModule
-} from '../component-category-list/component-category-list';
-import {
-  ComponentApi,
-  ComponentExamples,
-  ComponentOverview,
-  ComponentViewer,
-  ComponentViewerModule
-} from '../component-viewer/component-viewer';
-import {DocViewerModule} from '../../shared/doc-viewer/doc-viewer-module';
+import { ComponentCategoryList, ComponentCategoryListModule } from '../component-category-list/component-category-list';
+//import { ComponentApi, ComponentExamples, ComponentOverview, ComponentViewer, ComponentViewerModule } from '../component-viewer/component-viewer';
+//import {DocViewerModule} from '../../shared/doc-viewer/doc-viewer-module';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {StackBlitzButtonModule} from '../../shared/stack-blitz';
-import {SvgViewerModule} from '../../shared/svg-viewer/svg-viewer';
+//import {StackBlitzButtonModule} from 'src/app/shared/material-site/stack-blitz';
+import {SvgViewerModule} from 'src/app/shared/material-site/svg-viewer/svg-viewer';
 import {MatDrawerToggleResult} from '@angular/material/sidenav/drawer';
 import {MatListModule} from '@angular/material/list';
-import {NavigationFocusModule} from '../../shared/navigation-focus/navigation-focus';
-import {NavigationFocusService} from '../../shared/navigation-focus/navigation-focus.service';
+import {NavigationFocusModule} from 'src/app/shared/material-site/navigation-focus/navigation-focus';
+import {NavigationFocusService} from 'src/app/shared/material-site/navigation-focus/navigation-focus.service';
 
 // These constants are used by the ComponentSidenav for orchestrating the MatSidenav in a responsive
 // way. This includes hiding the sidenav, defaulting it to open, changing the mode from over to
@@ -130,7 +121,7 @@ const routes: Routes = [ {
       children : [
         {path : '', component : ComponentCategoryList},
       ],
-    },
+    }/*,
     {
       path : ':id',
       component : ComponentViewer,
@@ -141,7 +132,7 @@ const routes: Routes = [ {
         {path : 'examples', component : ComponentExamples, pathMatch : 'full'},
         {path : '**', redirectTo : 'overview'},
       ],
-    },
+    },*/
   ]
 } ];
 
@@ -153,15 +144,15 @@ const routes: Routes = [ {
     CommonModule,
     ComponentCategoryListModule,
     ComponentHeaderModule,
-    ComponentViewerModule,
-    DocViewerModule,
+    //ComponentViewerModule,
+    //DocViewerModule,
     FooterModule,
     FormsModule,
     HttpClientModule,
     CdkAccordionModule,
     MatIconModule,
     MatSidenavModule,
-    StackBlitzButtonModule,
+    //StackBlitzButtonModule,
     SvgViewerModule,
     RouterModule.forChild(routes),
     NavigationFocusModule
