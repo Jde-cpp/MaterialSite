@@ -8,65 +8,78 @@ export interface DocItem {
   examples?: string[];
 }
 
+/*
 export interface DocCategory {
   id: string;
   name: string;
   items: DocItem[];
   summary?: string;
 }
-
+*/
 export interface DocSection {
   name: string;
   summary: string;
 }
+
 const SettingsKey = 'settings';
-const AIKey = "ai";
+//const BlocklyKey = 'blocklyx';
 
 export const SECTIONS: {[key: string]: DocSection} =
 {
 	[SettingsKey]: { name: 'Settings', summary: 'Settings for the site.' },
-	[AIKey]: { name: 'AI', summary: 'AI.' },
+	//[BlocklyKey]: { name: 'Blocklyx', summary: 'Blockly Functions' },
 };
 
 
-const DOCS: { [key: string]: DocCategory[] } =
+const DOCS: { [key: string]: DocItem[] } =
 {
 	[SettingsKey]:
 	[
-		{id: 'applications',name: 'Applications',summary: 'View Applications.',items: []},
-		{id: 'logs',name: 'Logs',summary: 'View logs.',items: []},
-		{id: 'historian',name: 'Historian',summary: 'View historian.',items: []}
+		{id: 'applications',name: 'Applications',summary: 'View Applications.'},
+		{id: 'logs',name: 'Logs',summary: 'View logs.'},
+		{id: 'historian',name: 'Historian',summary: 'View historian.'}
 	],
-	[AIKey]:
+	/*[BlocklyKey]:
 	[
-		{id: 'matrix',	name: 'Matrix', summary: 'View Matrixes.',items: []},
-		{id: 'features',name: 'Features',summary: 'View Features.', items: []},
-		{id: 'calculation',name: 'Calculation',summary: 'View Calculations.',items: []}
-	]
+		{
+			id: 'autocomplete',
+			name: 'Autocomplete',
+			summary: 'Suggests relevant options as the user types.',
+			//exampleSpecs: { prefix: 'autocomplete-', },
+			//additionalApiDocs: [{name: 'Testing', path: 'material-autocomplete-testing.html'}],
+		 },
+		{id: 'tradeOption',	name: 'Option Trade', summary: 'Standard routing to buy and sell options.'},
+		{id: 'tradeStock',name: 'Stock Trade', summary: 'Standard routing to buy and sell stocks.'},
+	]*/
 };
 
-for( let category of DOCS[SettingsKey] )
+for( let doc of DOCS[SettingsKey] )
 {
-	for( let doc of category.items )
-		doc.packageName = SettingsKey;
+	doc.packageName = SettingsKey;
 }
+/*
+for( let doc of DOCS[BlocklyKey] )
+{
+	doc.packageName = BlocklyKey;
+}*/
 
-const AllSettings = DOCS[SettingsKey].reduce( (result, settings) => result.concat(settings.items), [] );
-const AllAI = DOCS[AIKey].reduce( (result, ai) => result.concat(ai.items), [] );
-const ALL_CATEGORIES = DOCS[SettingsKey].concat( DOCS[AIKey] ); //.concat( DOCS[WindowsKey] )
+const AllSettings = DOCS[SettingsKey];
+//const AllBlockly = DOCS[BlocklyKey];
+const ALL_DOCS = AllSettings;//.concat(AllBlockly);
 
-@Injectable()
+
+
+@Injectable( {providedIn: 'root'} )
 export class DocumentationItems
 {
-	getCategories(section: string): DocCategory[]
-  	{
-		return DOCS[section];
-	}
-
 	getItems(section: string): DocItem[]
 	{
 		if( section===SettingsKey )
 			return AllSettings;
+/*		else if( section===BlocklyKey )
+		{
+			return AllBlockly;
+		}*/
 		return [];
 	}
 
@@ -75,14 +88,6 @@ export class DocumentationItems
 		//const sectionLookup = section === 'cdk' ? 'cdk' : 'material';
 		//return ALL_DOCS.find(doc => doc.id === id && doc.packageName === sectionLookup);
 		let item = null;
-		if( !item )
-			console.error( "item==null" );
-		return item;
-}
-
-  getCategoryById(id: string): DocCategory | undefined
-  {
-		var item = ALL_CATEGORIES.find(c => c.id == id);
 		if( !item )
 			console.error( "item==null" );
 		return item;

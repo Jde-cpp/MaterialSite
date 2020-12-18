@@ -18,3 +18,15 @@ source/projects/material-site/src/lib/material-site.service.spec.ts
 source/projects/material-site/src/lib/material-site.service.ts
 source/.vscode/settings.json
 source/.vscode/tasks.json
+control/karma.conf.js
+control/ng-package.json
+control/package.json
+control/README.md
+control/tsconfig.lib.json
+control/tsconfig.lib.prod.json
+control/tsconfig.spec.json
+control/tslint.json
+control/src/lib/jde-material-site.service.ts
+control/src/lib/jde-material-site.service.spec.ts
+control/src/lib/jde-material-site.component.ts
+control/src/lib/jde-material-site.component.spec.ts

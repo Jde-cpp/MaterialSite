@@ -32,6 +32,7 @@ import {MatListModule} from '@angular/material/list';
 import {NavigationFocusModule} from 'src/app/shared/material-site/navigation-focus/navigation-focus';
 import {NavigationFocusService} from 'src/app/shared/material-site/navigation-focus/navigation-focus.service';
 
+
 // These constants are used by the ComponentSidenav for orchestrating the MatSidenav in a responsive
 // way. This includes hiding the sidenav, defaulting it to open, changing the mode from over to
 // side, determining the size of the top gap, and whether the sidenav is fixed in the viewport.
@@ -109,32 +110,31 @@ export class ComponentNav {
   constructor(public docItems: DocumentationItems) {}
 }
 
-const routes: Routes = [ {
-  path : '',
-  component : ComponentSidenav,
-  children : [
-    {path : '', redirectTo : 'categories', pathMatch : 'full'},
-    {path : 'component/:id', redirectTo : ':id', pathMatch : 'full'},
-    {path : 'category/:id', redirectTo : '/categories/:id', pathMatch : 'full'},
-    {
-      path : 'categories',
-      children : [
-        {path : '', component : ComponentCategoryList},
-      ],
-    }/*,
-    {
-      path : ':id',
-      component : ComponentViewer,
-      children : [
-        {path : '', redirectTo : 'overview', pathMatch : 'full'},
-        {path : 'overview', component : ComponentOverview, pathMatch : 'full'},
-        {path : 'api', component : ComponentApi, pathMatch : 'full'},
-        {path : 'examples', component : ComponentExamples, pathMatch : 'full'},
-        {path : '**', redirectTo : 'overview'},
-      ],
-    },*/
-  ]
-} ];
+const routes: Routes =
+[{
+	path : '',
+	component : ComponentSidenav,
+	children : [
+		{path : '', redirectTo : 'categories', pathMatch : 'full'},
+    	{path : 'component/:id', redirectTo : ':id', pathMatch : 'full'},
+    	{path : 'category/:id', redirectTo : '/categories/:id', pathMatch : 'full'},
+    	{
+      	path : 'categories',
+			children : [{path : '', component : ComponentCategoryList}],
+		}/*,
+		{
+			path : ':id',
+			component : ComponentViewer,
+			children : [
+				{path : '', redirectTo : 'overview', pathMatch : 'full'},
+				{path : 'overview', component : ComponentOverview, pathMatch : 'full'},
+				{path : 'api', component : ComponentApi, pathMatch : 'full'},
+				{path : 'examples', component : ComponentExamples, pathMatch : 'full'},
+				{path : '**', redirectTo : 'overview'},
+			],
+		}*/
+	]
+}];
 
 @NgModule({
   imports: [
