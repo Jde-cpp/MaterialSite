@@ -1,0 +1,18 @@
+<!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
+<nav class="docs-navbar-header" [class.is-next-version]="isNextVersion">
+  <div class="skip-link-wrapper" [class.cdk-visually-hidden]="skipLinkHidden" *ngIf="skipLinkHref">
+    <a mat-raised-button [href]="skipLinkHref" (focus)="skipLinkHidden = false" (blur)="skipLinkHidden = true" color="accent">
+      Skip to main content
+    </a>
+  </div>
+  <a *ngFor="let m of routes" mat-button class="docs-navbar-hide-small docs-button" [routerLink]="m.path">{{m.path.charAt(0).toUpperCase()+m.path.slice(1)}}</a>
+  <nav class="docs-navbar-header" [class.is-next-version]="isNextVersion"></nav>
+  <div class="flex-spacer"></div>
+  <theme-picker></theme-picker>
+</nav>
+<nav class="docs-navbar docs-navbar-show-small" aria-label="Section Nav Bar">
+  <a mat-button class="docs-navbar-link"
+    *ngFor="let key of sectionKeys"
+    [routerLink]="key">{{sections[key].name}}</a>
+  <a mat-button class="docs-navbar-link" routerLink="guides">Guides</a>
+</nav>
