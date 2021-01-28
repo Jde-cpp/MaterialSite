@@ -46,7 +46,7 @@ export class ComponentCategoryList implements OnInit, OnDestroy {
 }
 
 @NgModule({
-  imports: [CommonModule, SvgViewerModule, MatCardModule, RouterModule, NavigationFocusModule],
+  imports: [CommonModule, MatCardModule, RouterModule, SvgViewerModule, NavigationFocusModule],
   exports: [ComponentCategoryList],
   declarations: [ComponentCategoryList],
   providers: [DocumentationItems],

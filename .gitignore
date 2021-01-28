@@ -19,7 +19,6 @@ source/projects/material-site/src/lib/material-site.service.ts
 source/.vscode/settings.json
 source/.vscode/tasks.json
 control/karma.conf.js
-control/ng-package.json
 control/package.json
 control/README.md
 control/tsconfig.lib.json

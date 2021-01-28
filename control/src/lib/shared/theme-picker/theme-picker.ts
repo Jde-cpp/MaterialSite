@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import {StyleManager} from '../style-manager';
+import {StyleManager} from '../style-manager/style-manager';
 import {DocsSiteTheme, ThemeStorage} from './theme-storage/theme-storage';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';

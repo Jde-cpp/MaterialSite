@@ -1,38 +1,82 @@
-baseDir=`pwd`;
-destDir=$(dirname $(readlink -e $baseDir/source/projects/material-site/src))/src;
-materialDir=$(dirname $(readlink -e $baseDir/../material.angular.io/src))/src;
+source ./env.sh;
+cd $clientDir
+ng generate library jde-material-site;
+cd $clientDir/projects/jde-material-site/
+addHard $materialDir ng-package.json;
+cd src;
+rm public-api.ts;
+addHard $materialDir/src projects.ts;
 
-function moveDir
-{
-	source=$1
-	destination=$2
-	directory=$3
+moveToDir assets;
+addHard $materialDir/src/assets deeppurple-amber.css
+addHard $materialDir/src/assets pink-bluegrey.css
+addHard $materialDir/src/assets purple-green.css
+moveToDir img
+addHard $materialDir/src/assets/img theme-demo-icon.svg
+addHardDir $materialDir/src/assets/img homepage
+moveToDir pages
+addHardDir $materialDir/src/assets/pages component-category-list
+addHardDir $materialDir/src/assets/pages component-sidenav
 
-	rm -r -f $destination/$directory;
-	cp -r $source/$directory $destination/$directory;
-	spec=$destination/$directory/$directory.spec.ts;
-	if [ -f $spec ]; then rm $spec; fi;
-};
+cd ../..;
+moveToDir styles;
+addHardDir $materialDir/src/styles custom-themes
+addHard $materialDir/src/styles _api.scss
+addHard $materialDir/src/styles _api-theme.scss
+addHard $materialDir/src/styles _constants.scss
+addHard $materialDir/src/styles _general.scss
+addHard $materialDir/src/styles _markdown.scss
+addHard $materialDir/src/styles _markdown-theme.scss
+addHard $materialDir/src/styles _svg-theme.scss
+addHard $materialDir/src/styles _tables.scss
+addHard $materialDir/src/styles _tables-theme.scss
 
-cp $materialDir/assets/img/theme-demo-icon.svg $destDir/assets/img/theme-demo-icon.svg
+cd ../lib
+addHard $materialDir/src/lib jde-material-site.module.ts
 
-moveDir $materialDir $destDir styles
+moveToDir shared
+addHardDir $materialDir/src/lib/shared documentation-items
+addHardDir $materialDir/src/lib/shared footer
+addHardDir $materialDir/src/lib/shared navbar
+addHardDir $materialDir/src/lib/shared navigation-focus
+addHardDir $materialDir/src/lib/shared style-manager
+addHardDir $materialDir/src/lib/shared svg-viewer
+addHardDir $materialDir/src/lib/shared version
 
-pagesSource=$materialDir/app/pages
-pagesDest=$destDir/lib/pages/material-site
-moveDir $pagesSource $pagesDest component-category-list
-moveDir $pagesSource $pagesDest component-page-header
-moveDir $pagesSource $pagesDest component-sidenav
-moveDir $pagesSource $pagesDest page-title
+moveToDir theme-picker
+addHard $materialDir/src/lib/shared/theme-picker index.ts
+addHard $materialDir/src/lib/shared/theme-picker theme-picker.html
+addHard $materialDir/src/lib/shared/theme-picker theme-picker.scss
+addHard $materialDir/src/lib/shared/theme-picker theme-picker.ts
+addHardDir $materialDir/src/lib/shared/theme-picker theme-storage
 
-sharedSource=$materialDir/app/shared
-sharedDest=$destDir/lib/shared/material-site
-moveDir $sharedSource $sharedDest documentation-items
-moveDir $sharedSource $sharedDest footer
-moveDir $sharedSource $sharedDest navbar
-moveDir $sharedSource $sharedDest navigation-focus
-moveDir $sharedSource $sharedDest style-manager
-moveDir $sharedSource $sharedDest svg-viewer
-moveDir $sharedSource $sharedDest theme-picker
-rm $sharedDest/theme-picker/theme-storage/theme-storage.spec.ts
-moveDir $sharedSource $sharedDest version
+cd ../..
+moveToDir pages
+addHardDir $materialDir/src/lib/pages component-category-list
+addHardDir $materialDir/src/lib/pages component-page-header
+addHardDir $materialDir/src/lib/pages component-sidenav
+addHardDir $materialDir/src/lib/pages page-title
+
+# moveToDir $clientDir/src/styles;
+# if [ $link -eq 1 ]; then ln -s $materialDir/styles/* .; else cp -s $materialDir/styles/* .; fi;
+# cd ../assets
+# if [ $link -eq 1 ]; then ln -s $materialDir/assets/* .; else cp -s $materialDir/assets/* .; fi;
+# echo here
+# cd $appDir;
+# moveToDir pages;
+# if [ $link -eq 1 ]; then ln -s $materialDir/lib/pages/material-site .; else cp $materialDir/lib/pages/material-site .; fi;
+# cd ..;moveToDir shared;
+# if [ $link -eq 1 ]; then
+# 	moveToDir material-site;
+# 	ln -s $materialDir/lib/shared/material-site/documentation-items .;
+# 	ln -s $materialDir/lib/shared/material-site/footer .;
+# 	ln -s $materialDir/lib/shared/material-site/navigation-focus .;
+# 	ln -s $materialDir/lib/shared/material-site/style-manager .;
+# 	ln -s $materialDir/lib/shared/material-site/svg-viewer .;
+# 	ln -s $materialDir/lib/shared/material-site/theme-picker .;
+# 	ln -s $materialDir/lib/shared/material-site/version .;
+# 	moveToDir navbar;
+# 	ln -s $materialDir/lib/shared/material-site/navbar/* .;
+# else
+# 	cp $materialDir/lib/shared/material-site .;
+# fi;
