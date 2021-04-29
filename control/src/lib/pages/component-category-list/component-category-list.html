@@ -3,8 +3,8 @@
      focusOnNavigation>
   <div [innerHTML]="_categoryListSummary"></div>
 </div>
-<div class="docs-component-category-list" *ngIf="(params | async)?.section as section">
-  <a *ngFor="let component of docItems.getItems(section)"
+<div class="docs-component-category-list">
+  <a *ngFor="let component of items"
      class="docs-component-category-list-item"
     [routerLink]="'/' + section + '/' + component.id">
     <div class="docs-component-category-list-card">
@@ -18,5 +18,5 @@
       <div class="docs-component-category-list-card-title">{{component.name}}</div>
       <div class="docs-component-category-list-card-summary">{{component.summary}}</div>
     </div>
-  </a>
+	</a>
 </div>

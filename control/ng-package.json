@@ -3,6 +3,6 @@
   "dest": "../../dist/jde-material-site",
   "assets": ["./src/assets/*","./src/styles/*"],
   "lib": {
-    "entryFile": "src/projects.ts"
+    "entryFile": "src/public-api.ts"
   }
 }

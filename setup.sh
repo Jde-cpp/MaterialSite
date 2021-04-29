@@ -1,7 +1,7 @@
-source ./env.sh;
+#source ./env.sh;
 cd $clientDir
 ng generate library jde-material-site;
-cd $clientDir/projects/jde-material-site/
+cd projects/jde-material-site/
 addHard $materialDir ng-package.json;
 cd src;
 rm public-api.ts;
@@ -14,7 +14,8 @@ addHard $materialDir/src/assets purple-green.css
 moveToDir img
 addHard $materialDir/src/assets/img theme-demo-icon.svg
 addHardDir $materialDir/src/assets/img homepage
-moveToDir pages
+cd ..;
+moveToDir pages;
 addHardDir $materialDir/src/assets/pages component-category-list
 addHardDir $materialDir/src/assets/pages component-sidenav
 
@@ -57,26 +58,6 @@ addHardDir $materialDir/src/lib/pages component-page-header
 addHardDir $materialDir/src/lib/pages component-sidenav
 addHardDir $materialDir/src/lib/pages page-title
 
-# moveToDir $clientDir/src/styles;
-# if [ $link -eq 1 ]; then ln -s $materialDir/styles/* .; else cp -s $materialDir/styles/* .; fi;
-# cd ../assets
-# if [ $link -eq 1 ]; then ln -s $materialDir/assets/* .; else cp -s $materialDir/assets/* .; fi;
-# echo here
-# cd $appDir;
-# moveToDir pages;
-# if [ $link -eq 1 ]; then ln -s $materialDir/lib/pages/material-site .; else cp $materialDir/lib/pages/material-site .; fi;
-# cd ..;moveToDir shared;
-# if [ $link -eq 1 ]; then
-# 	moveToDir material-site;
-# 	ln -s $materialDir/lib/shared/material-site/documentation-items .;
-# 	ln -s $materialDir/lib/shared/material-site/footer .;
-# 	ln -s $materialDir/lib/shared/material-site/navigation-focus .;
-# 	ln -s $materialDir/lib/shared/material-site/style-manager .;
-# 	ln -s $materialDir/lib/shared/material-site/svg-viewer .;
-# 	ln -s $materialDir/lib/shared/material-site/theme-picker .;
-# 	ln -s $materialDir/lib/shared/material-site/version .;
-# 	moveToDir navbar;
-# 	ln -s $materialDir/lib/shared/material-site/navbar/* .;
-# else
-# 	cp $materialDir/lib/shared/material-site .;
-# fi;
+moveToDir services;
+#addHardDir $materialDir/src/lib/services authorization;
+cp -r $materialDir/src/lib/services/authorization .;
