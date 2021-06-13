@@ -146,7 +146,7 @@ import {
 	 {
 		 let self = this;
 		 this.siblingSubscription = this.siblingEvents?.subscribe( this.loadSiblings )
-		 this.router.events.pipe( filter(e=>e instanceof NavigationEnd) ).subscribe( this.onNavigationEnd );
+		 //this.router.events.pipe( filter(e=>e instanceof NavigationEnd) ).subscribe( this.onNavigationEnd );
 		 /*	(val) =>
 		 {
 			 if( val instanceof NavigationEnd )
@@ -194,11 +194,11 @@ import {
 	 {
 		 return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
 	 }
-	 onNavigationEnd =( val:NavigationEnd )=>
+/*	 onNavigationEnd =( val:NavigationEnd )=>
 	 {
  //		if( !this.isRoot(val.url) )
  //			this.reload( val.url.substr(1) );
-	 }
+	 }*/
  }
 
  @NgModule({

@@ -8,6 +8,7 @@
   <a *ngFor="let m of routes" mat-button class="docs-navbar-hide-small docs-button" [routerLink]="m.path">{{m.path.charAt(0).toUpperCase()+m.path.slice(1)}}</a>
   <nav class="docs-navbar-header" [class.is-next-version]="isNextVersion"></nav>
   <div class="flex-spacer"></div>
+  <authorization></authorization>
   <theme-picker></theme-picker>
 </nav>
 <nav class="docs-navbar docs-navbar-show-small" aria-label="Section Nav Bar">

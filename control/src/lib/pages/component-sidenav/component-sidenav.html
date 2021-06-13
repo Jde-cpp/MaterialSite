@@ -6,7 +6,7 @@
 					[mode]="(isScreenSmall | async) ? 'over' : 'side'"
 					[fixedInViewport]="(isScreenSmall | async)"
 					[fixedTopGap]="(isExtraScreenSmall | async) ? 92 : 56">
-	  <app-component-nav [params]="params"></app-component-nav>
+	  <app-component-nav ></app-component-nav><!-- [params]="params" -->
 	  <div style="background-color: yellow;height: 50px;"></div>
 	</mat-sidenav>
 	<div class="docs-component-sidenav-content">

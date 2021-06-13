@@ -2,8 +2,6 @@
  * Public API Surface of jde-material-site
  */
 
-export * from './lib/jde-material-site.service';
-export * from './lib/jde-material-site.component';
 export * from './lib/jde-material-site.module';
 export * from './lib/pages/page-title/page-title';
 export * from './lib/pages/component-page-header/component-page-header';

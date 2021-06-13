@@ -9,4 +9,5 @@ export class DisabledAuthService implements IAuth
 	login( token:string ){}
 	subscribe():Observable<void>{ throw "Disabled"; };
 	loggedIn = false;
+	idToken = null;
 }
