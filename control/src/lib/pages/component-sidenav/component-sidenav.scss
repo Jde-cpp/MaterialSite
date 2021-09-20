@@ -1,6 +1,4 @@
-@import '../../../styles/constants';
-
-$sidenav-width: 240px;
+@use '../../../styles/constants';
 
 app-component-sidenav {
   display: flex;
@@ -20,12 +18,6 @@ app-component-sidenav {
 .docs-component-sidenav-inner-content {
   display: flex;
   flex-direction: row;
-
-  // The rule will match the element following the router-outlet which will be the routed component.
-  router-outlet + * {
-    flex-grow: 1;
-    overflow: hidden;
-  }
 }
 
 .mat-drawer {
@@ -40,8 +32,8 @@ app-component-sidenav {
   top: 0;
 
   .docs-component-viewer-nav-content {
-    width: $sidenav-width;
-    height: 100vh;
+    width: constants.$sidenav-width;
+    height: calc(100vh - 56px);
     overflow: auto;
 
     &::-webkit-scrollbar {
@@ -95,7 +87,7 @@ div.docs-component-viewer-nav-content .mat-nav-list .mat-list-item .mat-list-ite
   padding-left: 25px;
 }
 
-@media (max-width: $small-breakpoint-width) {
+@media (max-width: constants.$small-breakpoint-width) {
   // Add specific rule to prevent default rule conflict
   .docs-component-viewer-sidenav-container .docs-component-viewer-sidenav {
     // position right above the content

@@ -25,15 +25,15 @@ export class StyleManager {
   }
 }
 
-  export function getLinkElementForKey(key: string) {
+function getLinkElementForKey(key: string) {
   return getExistingLinkElementByKey(key) || createLinkElementWithKey(key);
-  }
+}
 
-  export function getExistingLinkElementByKey(key: string) {
+function getExistingLinkElementByKey(key: string) {
   return document.head.querySelector(`link[rel="stylesheet"].${getClassNameForKey(key)}`);
 }
 
-export function createLinkElementWithKey(key: string) {
+function createLinkElementWithKey(key: string) {
   const linkEl = document.createElement('link');
   linkEl.setAttribute('rel', 'stylesheet');
   linkEl.classList.add(getClassNameForKey(key));
@@ -41,7 +41,6 @@ export function createLinkElementWithKey(key: string) {
   return linkEl;
 }
 
-export function getClassNameForKey(key: string) {
+function getClassNameForKey(key: string) {
   return `style-manager-${key}`;
 }
-

@@ -2,7 +2,7 @@ import {AfterViewInit, Component, NgModule, Inject, OnInit} from '@angular/core'
 import { timeout } from 'rxjs/operators';
 import { IAuth } from '../../services/authorization/IAuth';
 
-declare const gapi: any;
+declare const gapi: any;//<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 @Component({ selector: 'authorization', templateUrl: './authorization.html' })
 export class Authorization implements OnInit, AfterViewInit
@@ -44,13 +44,21 @@ export class Authorization implements OnInit, AfterViewInit
 				//'height': 50,
 				//'longtitle': false,
 				theme: 'dark',
-				onsuccess: (param) =>{ console.log( 'Authorization::onsuccess' ); this.onSignIn(param.getAuthResponse().id_token);}//(param) => this.onSignIn(param)
+				onsuccess: (param)=>{ console.log( 'Authorization::onsuccess' ); this.onSignIn(param.getAuthResponse().id_token);},//(param) => this.onSignIn(param)
+				onfailure: (k)=>{ debugger;console.error( `could not render google login ${k.error}` );}
 			} );
 		}
 		catch( e )
 		{
-			if( e instanceof ReferenceError && recursive<5 )
-				setTimeout( ()=>this.renderSignin(++recursive), 10 );
+			if( e instanceof ReferenceError )
+			{
+				if( recursive<5 )
+					setTimeout( ()=>this.renderSignin(++recursive), 10 );
+				else
+					console.error( `could not render google login - '${e}'` );
+			}
+			else
+				console.error( `could not render google login:  '${e}'` );
 		}
 	}
 	onSignIn(token:string)

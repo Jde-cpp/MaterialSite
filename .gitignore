@@ -29,3 +29,4 @@ control/src/lib/jde-material-site.service.ts
 control/src/lib/jde-material-site.service.spec.ts
 control/src/lib/jde-material-site.component.ts
 control/src/lib/jde-material-site.component.spec.ts
+my-workspace/*

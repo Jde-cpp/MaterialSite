@@ -1,5 +1,3 @@
-@import '~@angular/material/theming';
-
 // The values were determined through the combination of Material Design breakpoints and careful
 // testing of the application across a range of common device widths (360px+).
 // These breakpoint values need to stay in sync with the related constants in
@@ -11,5 +9,8 @@ $extra-small-breakpoint-width: 720px;
 $small-breakpoint-width: 959px;
 
 /* For desktop, the content should be aligned with the page title. */
-$content-padding-side: 70px;
+$content-padding-guides-side: 70px;
+$content-padding-sidenav: 50px;
 $content-padding-side-xs: 15px;
+
+$sidenav-width: 240px;

@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import {StyleManager} from '../style-manager/style-manager';
+import {StyleManager} from '../style-manager';
 import {DocsSiteTheme, ThemeStorage} from './theme-storage/theme-storage';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
@@ -28,7 +28,7 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 })
 export class ThemePicker implements OnInit, OnDestroy {
   private _queryParamSubscription = Subscription.EMPTY;
-  currentTheme: DocsSiteTheme;
+  currentTheme: DocsSiteTheme | undefined;
 
   // The below colors need to align with the themes defined in theme-picker.scss
   themes: DocsSiteTheme[] = [
@@ -75,6 +75,12 @@ export class ThemePicker implements OnInit, OnDestroy {
     const themeName = this._themeStorage.getStoredThemeName();
     if (themeName) {
       this.selectTheme(themeName);
+    } else {
+      this.themes.find(themes => {
+        if (themes.isDefault === true) {
+          this.selectTheme(themes.name);
+        }
+      });
     }
   }
 
@@ -104,7 +110,7 @@ export class ThemePicker implements OnInit, OnDestroy {
     if (theme.isDefault) {
       this.styleManager.removeStyle('theme');
     } else {
-      this.styleManager.setStyle('theme', `assets/${theme.name}.css`);
+      this.styleManager.setStyle('theme', `${theme.name}.css`);
     }
 
     if (this.currentTheme) {
