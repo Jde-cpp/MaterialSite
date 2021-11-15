@@ -24,8 +24,12 @@ export class NavBar implements OnDestroy {
   skipLinkHref: string | null | undefined;
   skipLinkHidden = true;
   routes = [];
+  //get active():bool{ return this.router.url=='/' &&  }
   constructor(private navigationFocusService: NavigationFocusService, public router: Router) {
-	this.routes = router.config.filter( x=>x.path.indexOf(':id')==-1 );
+	this.routes = router.config.filter( x=>x.path.length && x.path.indexOf(':id')==-1 );
+	let dflt = this.routes.find( x=>x.component.name==router.config.find( x=>!x.path.length )?.component.name );
+	if( dflt )
+		dflt.default = true;
 	setTimeout(() => this.skipLinkHref = this.navigationFocusService.getSkipLinkHref(), 100);
   }
 

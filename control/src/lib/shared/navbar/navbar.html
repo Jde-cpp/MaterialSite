@@ -7,9 +7,10 @@
     </a>
   </div>
   <a mat-button class="docs-navbar-hide-small docs-button"
-    *ngFor="let m of routes"
-     [routerLink]="m.path"
-     routerLinkActive="docs-navbar-header-item-selected">{{m.path.charAt(0).toUpperCase()+m.path.slice(1)}}</a>
+    *ngFor="let r of routes"
+     [routerLink]="r.path"
+	  [class.docs-navbar-header-item-selected] = "router.url=='/' && r.default"
+     routerLinkActive="docs-navbar-header-item-selected">{{r.path.charAt(0).toUpperCase()+r.path.slice(1)}}</a>
   <div class="flex-spacer"></div>
   <authorization></authorization>
   <theme-picker></theme-picker>
