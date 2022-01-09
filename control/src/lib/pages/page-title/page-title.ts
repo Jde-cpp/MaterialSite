@@ -16,7 +16,7 @@ export class ComponentPageTitle {
   set title(title: string) {
     this._title = title;
     if (title !== '') {
-      title = `${title} | Angular Material`;
+      title = `${title} | Jde-cpp`;
     } else {
       title = this._originalTitle;
     }
