@@ -6,7 +6,7 @@ import { IAuth } from './IAuth';
 export class DisabledAuthService implements IAuth
 {
 	enabled():boolean{ return false; }
-	login( token:string ){}
+	login( token:string ):Promise<void>{ return Promise.resolve(); }
 	subscribe():Observable<void>{ throw "Disabled"; };
 	loggedIn = false;
 	idToken = null;
