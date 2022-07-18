@@ -17,7 +17,7 @@ import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
-import {MatDrawerToggleResult} from '@angular/material/sidenav/drawer';
+import {MatDrawerToggleResult} from '@angular/material/sidenav';
 import {ActivatedRoute, Params, RouterModule, Router} from '@angular/router';
 import {combineLatest, Observable, Subscription, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
