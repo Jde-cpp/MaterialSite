@@ -1,10 +1,12 @@
-import { Observable } from "rxjs";
+//import { Observable } from "rxjs";
 
 export interface IAuth
 {
-	enabled():boolean;
+
 	login( token?:string ):Promise<void>;
 	//subscribe():Promise<void>;
+
+	readonly enabled:boolean;
 	loggedIn:boolean;
 	idToken:string;
 	//init( button:HTMLElement ):void;

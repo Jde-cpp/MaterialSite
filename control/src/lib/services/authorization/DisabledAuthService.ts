@@ -5,7 +5,7 @@ import { IAuth } from './IAuth';
 @Injectable()
 export class DisabledAuthService implements IAuth
 {
-	enabled():boolean{ return false; }
+	get enabled():boolean{ return false; }
 	login( token:string ):Promise<void>{ return Promise.resolve(); }
 	subscribe():Observable<void>{ throw "Disabled"; };
 	loggedIn = false;
