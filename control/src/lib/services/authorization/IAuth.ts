@@ -4,7 +4,8 @@ export interface IAuth
 {
 
 	login( token?:string ):Promise<void>;
-	//subscribe():Promise<void>;
+	googleAuthClientId():Promise<string>;
+	onLogout():void;
 
 	readonly enabled:boolean;
 	loggedIn:boolean;

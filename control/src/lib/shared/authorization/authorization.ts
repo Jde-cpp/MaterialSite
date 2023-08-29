@@ -10,15 +10,16 @@ export class Authorization implements OnInit, AfterViewInit
 	constructor( @Inject('IEnvironment') private env: IEnvironment, @Inject('IAuth') private authorizationService: IAuth )
 	{}
 
-	ngOnInit()
+	async ngOnInit()
 	{
+		const googleAuthClientId = await this.authorizationService.googleAuthClientId();
 		if( this.googleCredential )
-			this.handleCredentialResponse( {clientid: this.googleLoginClientId, client_id: this.googleLoginClientId, credential: this.googleCredential, select_by: "user" } );
+			this.handleCredentialResponse( {clientid: googleAuthClientId, client_id: googleAuthClientId, credential: this.googleCredential, select_by: "user" } );
 		else
 		{
 			debugger;
 			google.accounts.id.initialize({
-				client_id: this.googleLoginClientId,
+				client_id: googleAuthClientId,
 				callback: this.handleCredentialResponse.bind(this),
 				auto_select: false,
 				cancel_on_tap_outside: true,
@@ -33,11 +34,12 @@ export class Authorization implements OnInit, AfterViewInit
 		}
 //		(window as any).googleLogin = this.googleLogin;
 	}
-	async handleCredentialResponse(response: any) {
+	async handleCredentialResponse(response: any)
+	{
 		try
 		{
 			await this.authorizationService.login( response.credential );
-			console.log(response);
+			console.log( "logged in succesfully" );
 		}
 		catch( e )
 		{
@@ -122,7 +124,6 @@ export class Authorization implements OnInit, AfterViewInit
 	*/
 	};
 	private get googleCredential(){return this.env.get("googleCredential"); }
-	private get googleLoginClientId(){return this.env.get("googleLoginClientId"); }
 }
 @NgModule({ imports: [], exports: [Authorization], declarations: [Authorization], providers: [] })
 export class AuthorizationModule
