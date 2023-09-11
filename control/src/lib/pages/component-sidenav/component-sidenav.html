@@ -6,16 +6,16 @@
               [mode]="(isScreenSmall | async) ? 'over' : 'side'"
               [fixedInViewport]="(isScreenSmall | async)"
               [fixedTopGap]="(isExtraScreenSmall | async) ? 92 : 56">
-    <app-component-nav></app-component-nav><!-- [params]="params" -->
+    <app-component-nav></app-component-nav> <!-- [params]="params" -->
   </mat-sidenav>
   <div class="docs-component-sidenav-content">
     <component-page-header (toggleSidenav)="toggleSidenav(sidenav)"></component-page-header>
     <div class="docs-component-sidenav-inner-content">
       <main class="docs-component-sidenav-body-content">
         <!-- If on large screen, menu resides to left of content -->
-        <app-component-nav [siblingEvents]="siblings.asObservable()"
+        <app-component-nav
           *ngIf="(isScreenSmall | async) === false"
-          >
+          > <!-- [params]="params" -->
         </app-component-nav>
         <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
       </main>

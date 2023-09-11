@@ -43,7 +43,7 @@ export class Authorization implements OnInit, AfterViewInit
 		}
 		catch( e )
 		{
-			console.error( e["message"] );
+			console.error( e["message"] ?? e["error"] );
 		}
 	}
 	googleLogin(userInfo)

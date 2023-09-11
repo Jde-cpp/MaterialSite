@@ -1,9 +1,9 @@
 import {Component, NgModule, OnDestroy} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {NgIf, NgFor} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Router, RouterModule} from '@angular/router';
-import {ThemePickerModule} from '../theme-picker/theme-picker';
+import {ThemePicker} from '../theme-picker/theme-picker';
 import {SECTIONS} from '../documentation-items/documentation-items';
 import {ThemeStorage} from '../theme-picker/theme-storage/theme-storage';
 import {StyleManager} from '../style-manager';
@@ -16,7 +16,9 @@ const SECTIONS_KEYS = Object.keys(SECTIONS);
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.html',
-  styleUrls: ['./navbar.scss']
+  styleUrls: ['./navbar.scss'],
+	standalone: true,
+	imports: [NgIf, MatButtonModule, RouterLink, NgFor, RouterLinkActive, /*VersionPicker,*/ ThemePicker,AuthorizationModule]
 })
 export class NavBar implements OnDestroy {
   private subscriptions = new Subscription();
@@ -45,19 +47,3 @@ export class NavBar implements OnDestroy {
     this.subscriptions.unsubscribe();
   }
 }
-
-@NgModule({
-  imports: [
-	AuthorizationModule,
-	CommonModule,
-    HttpClientModule,
-    MatButtonModule,
-    MatMenuModule,
-    RouterModule,
-    ThemePickerModule
-  ],
-  exports: [NavBar],
-  declarations: [NavBar],
-  providers: [StyleManager, ThemeStorage]
-})
-export class NavBarModule {}

@@ -1,4 +1,4 @@
-@use '../../../../../../node_modules/@angular/material' as mat;
+@use '@angular/material' as mat;
 @use 'sass:color';
 @use 'sass:map';
 @use '../../../styles/constants';
@@ -27,19 +27,18 @@
 
       &.docs-component-viewer-sidenav-item-selected {
         background: rgba(mat.get-color-from-palette($primary, default), 0.15);
-        color: color.adjust(
-          mat.get-color-from-palette($primary, default),
-          $lightness: if($is-dark-theme, 25%, 0%)
-        );
+
+        .mdc-list-item__primary-text {
+          color: color.adjust(
+            mat.get-color-from-palette($primary, default),
+            $lightness: if($is-dark-theme, 25%, 0%)
+          );
+        }
       }
 
       &.docs-component-viewer-sidenav-item-selected:hover {
         background: rgba(mat.get-color-from-palette($primary, default), 0.3);
       }
-    }
-
-    .mat-list-item {
-      color: rgba(mat.get-color-from-palette($foreground, secondary-text), 0.65);
     }
   }
 
