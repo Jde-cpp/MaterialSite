@@ -6,7 +6,7 @@
 <div class="docs-component-category-list">
   <a *ngFor="let component of items"
      class="docs-component-category-list-item"
-    [routerLink]="'/' + section + '/' + component.id">
+    [routerLink]="section + '/' + component.id">
     <div class="docs-component-category-list-card">
       <img *ngIf="section === 'components'"
           class="docs-component-category-list-card-image-wrapper"

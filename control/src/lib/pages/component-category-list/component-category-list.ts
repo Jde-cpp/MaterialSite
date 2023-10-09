@@ -1,8 +1,9 @@
-import {CommonModule, NgIf, NgFor, AsyncPipe} from '@angular/common';
-import {Component, NgModule, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule, Location, NgIf, NgFor, AsyncPipe} from '@angular/common';
+import {Component, Inject, NgModule, OnDestroy, OnInit, Optional} from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {ActivatedRoute, Params, RouterModule, RouterLink} from '@angular/router';
 import {combineLatest, Observable, Subscription} from 'rxjs';
+import {IRouteService, RouteService} from './IRouteService';
 
 /*import {
   DocumentationItems,
@@ -25,20 +26,27 @@ export class ComponentCategoryList implements OnInit, OnDestroy {
   routeParamSubscription: Subscription;// = new Subscription();
   _categoryListSummary: string | undefined;
   items = new Array<DocItem>();
-  section:string = "settings";
+  section:string = this._location.path();
   constructor(/*public docItems: DocumentationItems,*/
               public _componentPageTitle: ComponentPageTitle,
-              private _route: ActivatedRoute) {}
+              private _route: ActivatedRoute,
+							private _location:Location,
+							@Optional() @Inject('IRouteService') private _routeService:IRouteService){
+		if( !this._routeService )
+			this._routeService=new RouteService(_route)
+	}
 
-  ngOnInit() {
-		for( let x of this._route.parent.routeConfig.children )
+  async ngOnInit() {
+		const children = await this._routeService.children();
+		for( let x of children )
 		{
 			var docItem = <DocItem>x.data ?? { id: "", name: x.path };
 			docItem.id = x.path;
 			if( x.path.length && !x.path.endsWith("/:id") )
 				this.items.push( docItem );
 		}
-		const section = { name: 'Settings', summary: 'Settings for the site.' };
+		//const section = { name: 'Settings', summary: 'Settings for the site.' };
+		const section = { name: this._route.data["value"].name, summary: this._route.data["value"].summary };
 		this._componentPageTitle.title = section.name;
 	this._categoryListSummary = section.summary;
 		// title on topbar navigation
