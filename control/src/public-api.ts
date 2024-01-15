@@ -1,7 +1,3 @@
-/*
- * Public API Surface of jde-material-site
- */
-
 export * from './lib/jde-material.module';
 export * from './lib/pages/page-title/page-title';
 export * from './lib/pages/component-page-header/component-page-header';
@@ -20,5 +16,3 @@ export * from './lib/shared/theme-picker/theme-storage/theme-storage';
 export * from './lib/services/authorization/DisabledAuthService';
 export * from './lib/services/authorization/IAuth';
 export * from './lib/services/environment/IEnvironment';
-export * from './lib/services/environment/Environment';
-

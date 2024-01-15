@@ -1,7 +1,7 @@
 #!/bin/bash
-scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source $scriptDir/../../Framework/common.sh
-controlDir=$scriptDir/control;
+mainDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )"
+source $mainDir/../../Framework/scripts/common.sh
+controlDir=$mainDir/control;
 pushd `pwd` > /dev/null;
 
 workspace=$(basename $PWD);

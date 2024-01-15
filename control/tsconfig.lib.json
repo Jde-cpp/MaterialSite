@@ -8,7 +8,6 @@
     "inlineSources": true,
 	 "strictPropertyInitialization": false,
 	 "strictNullChecks": false,
-	 "suppressImplicitAnyIndexErrors": true,
 	 "noImplicitAny": false,
     "types": [],
     "lib": [

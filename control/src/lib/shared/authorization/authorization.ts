@@ -10,13 +10,11 @@ export class Authorization implements OnInit, AfterViewInit
 	constructor( @Inject('IEnvironment') private env: IEnvironment, @Inject('IAuth') private authorizationService: IAuth )
 	{}
 
-	async ngOnInit()
-	{
+	async ngOnInit(){
 		const googleAuthClientId = await this.authorizationService.googleAuthClientId();
 		if( this.googleCredential )
 			this.handleCredentialResponse( {clientid: googleAuthClientId, client_id: googleAuthClientId, credential: this.googleCredential, select_by: "user" } );
-		else
-		{
+		else{
 			debugger;
 			google.accounts.id.initialize({
 				client_id: googleAuthClientId,
@@ -32,33 +30,25 @@ export class Authorization implements OnInit, AfterViewInit
 				// @t s-ignore
 				google.accounts.id.prompt((notification: any/*PromptMomentNotification*/) => {});
 		}
-//		(window as any).googleLogin = this.googleLogin;
 	}
-	async handleCredentialResponse(response: any)
-	{
-		try
-		{
+	async handleCredentialResponse(response: any){
+		try{
 			await this.authorizationService.login( response.credential );
 			console.log( "logged in succesfully" );
 		}
-		catch( e )
-		{
+		catch( e ){
 			console.error( e["message"] ?? e["error"] );
 		}
 	}
-	googleLogin(userInfo)
-	{
+	googleLogin(userInfo){
 		debugger;
 		console.log(userInfo)
-  }
-	ngAfterViewInit()
-	{
-		globalThis.window["handleCredentialResponse"] = async (response) =>
-		{
-			console.log( 'a' );
+  	}
+
+	ngAfterViewInit(){
+		globalThis.window["handleCredentialResponse"] = async (response) =>{
 			debugger;
 		}
-		//debugger;
 		console.log( 'Authorization::ngAfterViewInit' );
 
 /*		if( this.authorizationService.enabled )
@@ -71,10 +61,8 @@ export class Authorization implements OnInit, AfterViewInit
 */
 	}
 
-	renderSignin( recursive:number=0 )
-	{
-		try
-		{
+	renderSignin( recursive:number=0 ){
+		try{
 			debugger;
 /*			google.accounts.id.initialize({
 				client_id: this.googleLoginClientId,
@@ -97,11 +85,9 @@ export class Authorization implements OnInit, AfterViewInit
 			// 	onfailure: (k)=>{ debugger;console.error( `could not render google login ${k.error}` );}
 			// } );
 		}
-		catch( e )
-		{
+		catch( e ){
 			debugger;
-			if( e instanceof ReferenceError )
-			{
+			if( e instanceof ReferenceError ){
 				if( recursive<5 )
 					setTimeout( ()=>this.renderSignin(++recursive), 10 );
 				else
@@ -111,8 +97,7 @@ export class Authorization implements OnInit, AfterViewInit
 				console.error( `could not render google login:  '${e}'` );
 		}
 	}
-	onSignIn(token:string)
-	{
+	onSignIn(token:string){
 		debugger;
 		//this.authorizationService.login( token );
 	/*	let profile = googleUser.getBasicProfile();
