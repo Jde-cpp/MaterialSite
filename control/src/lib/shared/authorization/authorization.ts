@@ -14,8 +14,7 @@ export class Authorization implements OnInit, AfterViewInit
 		const googleAuthClientId = await this.authorizationService.googleAuthClientId();
 		if( this.googleCredential )
 			this.handleCredentialResponse( {clientid: googleAuthClientId, client_id: googleAuthClientId, credential: this.googleCredential, select_by: "user" } );
-		else{
-			debugger;
+		else if( google ){
 			google.accounts.id.initialize({
 				client_id: googleAuthClientId,
 				callback: this.handleCredentialResponse.bind(this),

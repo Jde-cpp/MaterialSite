@@ -130,13 +130,10 @@ export class ComponentSidenav implements OnInit, OnDestroy {
         }
       ));
   }
-  public onRouterOutletActivate( event : any )
-  {
+  public onRouterOutletActivate( event : any ){
 	  this.siblingsSubscription?.unsubscribe();
-	  if( 'siblings' in event )
-	  {
-		  this.siblingsSubscription = event.siblings.subscribe( (x)=>
-		  {
+	  if( 'siblings' in event ){
+		  this.siblingsSubscription = event.siblings.subscribe( (x)=>{
 			  //~~~debugger;
 			  this.siblings.next(x);
 		  } );
@@ -184,12 +181,11 @@ export class ComponentNav {
 	@Input() siblingEvents: Observable<Map<string,string>>;
 
 
-  constructor( private router: Router, private _route: ActivatedRoute) {}
+  constructor( private router: Router, private _route: ActivatedRoute ) {}
 	ngOnDestroy(){ this.siblingSubscription?.unsubscribe(); }
-	ngOnInit()
-	{
+	ngOnInit(){
 		let self = this;
-		this.siblingSubscription = this.siblingEvents?.subscribe( this.loadSiblings )
+		this.siblingSubscription = this.siblingEvents?.subscribe( this.loadSiblings );
 		//this.router.events.pipe( filter(e=>e instanceof NavigationEnd) ).subscribe( this.onNavigationEnd );
 		/*	(val) =>
 		{
@@ -200,33 +196,34 @@ export class ComponentNav {
 		//console.log( `ComponentNav::ngOnInit parentUrl=${this.parentUrl}` );
 		this.reload( `/${this.parentUrl}` );
 	};
-	loadSiblings = ( e:Map<string,string> )=>
-	{
+	loadSiblings = ( e:Map<string,string> )=>{
 		if( !e )
 			this.reload( `/${this.parentUrl}` );
-		else
-		{
+		else{
 			this.items.length = 0;
 			let parent = '';
-			for( const [target,name] of e )
-			{
+			for( const [target,name] of e ){
 				var docItem = { id: parent+target, name: name, parentUrl: !parent.length };
+				console.log( `ComponentNav::loadSiblings id=${docItem.id} name=${docItem.name} parentUrl=${docItem.parentUrl}` );
 				this.items.push( docItem );
 				if( !parent )
 					parent = `${target}/`;
 			}
 		}
 	}
-	reload( url )
-	{
-		//~~~debugger;
-		let load = ( config )=>
-		{
+	
+	reload( url ){
+		//debugger;
+		let load = ( config )=>{
 			this.items.length = 0;
-			for( let x of config.children.filter( (x)=>!x.path.endsWith(":id") ) )
-			{
-				var docItem = <DocItem>x.data ?? { id: "", name: x.path };
+			for( let x of config.children.filter((x)=>!x.path.endsWith(":id")) ){
+				let docItem:DocItem = <DocItem>x.data ?? { id: "", name: x.path };
+				if( x.path.startsWith(':') ){
+					var x2 = this.router.config;
+					continue;
+				}
 				docItem.id = x.path;
+				console.log( `reload id=${docItem.id} name=${docItem.name} parentUrl=${docItem.parentUrl}` );
 				if( x.path.length )
 					this.items.push( docItem );
 			}
@@ -234,8 +231,8 @@ export class ComponentNav {
 		if( this.isRoot(url) )
 			load( this._route.routeConfig );
 	}
-	isRoot( url:string )
-	{
+	
+	isRoot( url:string ){
 		return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
 	}
 /*	 onNavigationEnd =( val:NavigationEnd )=>
