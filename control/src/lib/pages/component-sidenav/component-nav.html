@@ -4,10 +4,11 @@
       <mat-nav-list>
         <a mat-list-item *ngFor="let component of items"
            [routerLink]="'/' + section+ '/' + component.id"
-					 routerLinkActive="docs-component-viewer-sidenav-item-selected" [routerLinkActiveOptions]="{exact: true}"
+           routerLinkActive="docs-component-viewer-sidenav-item-selected" 
+					 [routerLinkActiveOptions]="{exact: true}"
            [attr.aria-current]="currentItemId === component.id ? 'page': 'false'">
 				 <mat-icon *ngIf="component.parentUrl">arrow_upward</mat-icon>
-				 {{component.name}}
+          {{component.name}}
         </a>
       </mat-nav-list>
   </div>

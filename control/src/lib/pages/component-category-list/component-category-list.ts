@@ -35,7 +35,7 @@ export class ComponentCategoryList implements OnInit, OnDestroy {
 		if( !this._routeService )
 			this._routeService=new RouteService(_route)
 	}
-
+						
   async ngOnInit() {
 		const children = await this._routeService.children();
 		for( let x of children )
@@ -60,8 +60,8 @@ export class ComponentCategoryList implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     //if (this.routeParamSubscription) {
-//      this.routeParamSubscription.unsubscribe();
-  //  }
+      //this.routeParamSubscription.unsubscribe();
+    //}
   }
 }
 

@@ -9,8 +9,8 @@ export interface AdditionalApiDoc {
 export interface ExampleSpecs {
   prefix: string;
   exclude?: string[];
-}
-*/
+}*/
+
 export interface DocItem {
   /** Id of the doc item. Used in the URL for linking to the doc. */
   id: string;
@@ -37,12 +37,11 @@ export interface DocSection {
   summary: string;
 }
 const SettingsKey = 'settings';
-//const exampleNames = Object.keys(EXAMPLE_COMPONENTS);
-//const CDK = 'cdk';
-//const COMPONENTS = 'components';
+// const exampleNames = Object.keys(EXAMPLE_COMPONENTS);
+// const CDK = 'cdk';
+// const COMPONENTS = 'components';
 export const SECTIONS: { [key: string]: DocSection } = {
-	[SettingsKey]: { name: 'Settings', summary: 'Settings for the site.' },
-	/*  [COMPONENTS]: {
+  /*[COMPONENTS]: {
     name: 'Components',
     summary: 'Angular Material offers a wide variety of UI components based on the <a' +
       ' href="https://material.io/components">Material Design specification</a>'
@@ -83,21 +82,31 @@ const ALL_DOCS = AllSettings;//.concat(AllBlockly);
 @Injectable( {providedIn: 'root'} )
 export class DocumentationItems {
 
-	getItems(section: string): DocItem[] {
+  getItems(section: string): DocItem[] {
 	  if (section === SettingsKey) {
-		 return AllSettings;
-	  }
-/*	  if (section === CDK) {
-		 return ALL_CDK;
-	  }*/
-	  return [];
-	}
+			return AllSettings;
+	 	}
+/*	 if (section === CDK) {
+      return ALL_CDK;
+    }*/
+    return [];
+  }
 
 	getItemById(id: string, section: string): DocItem | undefined {
-		let item = null;
+		let item;
 		if( !item )
 			console.error( "item==null" );
 		return item;
 	}
-
 }
+/*
+function processDocs(packageName: string, docs: DocItem[]): DocItem[] {
+  for (const doc of docs) {
+    doc.packageName = packageName;
+    doc.examples = exampleNames.filter(key =>
+      key.match(RegExp(`^${doc.exampleSpecs.prefix}`)) &&
+      !doc.exampleSpecs.exclude?.some(excludeName => key.indexOf(excludeName) === 0));
+  }
+
+  return docs.sort((a, b) => a.name.localeCompare(b.name, 'en'));
+}*/

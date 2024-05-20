@@ -30,8 +30,7 @@ import {
   RouterLinkActive,
   RouterLink
 } from '@angular/router';
-
-import {combineLatest, Observable, Subscription, Subject} from 'rxjs';
+import {combineLatest, Observable, Subject,	Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 //import {DocViewerModule} from '../../shared/doc-viewer/doc-viewer-module';
@@ -77,7 +76,6 @@ export interface DocItem
 	 examples?: string[];
 	 parentUrl?:boolean;
  }
-
 
 @Component({
   selector: 'app-component-sidenav',
@@ -180,8 +178,7 @@ export class ComponentNav {
 	private siblingSubscription: Subscription;
 	@Input() siblingEvents: Observable<Map<string,string>>;
 
-
-  constructor( private router: Router, private _route: ActivatedRoute ) {}
+  constructor(private router: Router, private _route: ActivatedRoute ) {}
 	ngOnDestroy(){ this.siblingSubscription?.unsubscribe(); }
 	ngOnInit(){
 		let self = this;

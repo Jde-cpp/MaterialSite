@@ -1,8 +1,5 @@
-//import { Observable } from "rxjs";
 
-export interface IAuth
-{
-
+export interface IAuth{
 	login( token?:string ):Promise<void>;
 	googleAuthClientId():Promise<string>;
 	onLogout():void;
@@ -10,5 +7,4 @@ export interface IAuth
 	readonly enabled:boolean;
 	loggedIn:boolean;
 	idToken:string;
-	//init( button:HTMLElement ):void;
 }
