@@ -9,7 +9,7 @@ import {NavigationFocusService} from '../navigation-focus/navigation-focus.servi
 import {ThemePicker} from '../theme-picker/theme-picker';
 //import {VersionPicker} from '../version-picker/version-picker';
 //import {AppLogo} from '../logo/logo';
-import { AuthorizationModule } from '../authorization/authorization';
+import { Authorization } from '../authorization/authorization';
 const SECTIONS_KEYS = Object.keys(SECTIONS);
 
 @Component({
@@ -18,7 +18,7 @@ const SECTIONS_KEYS = Object.keys(SECTIONS);
   styleUrls: ['./navbar.scss'],
   standalone: true,
   imports: [
-		AuthorizationModule,
+		Authorization,
     NgIf,
     MatButtonModule,
     RouterLink,
@@ -37,11 +37,11 @@ export class NavBar implements OnDestroy {
   skipLinkHidden = true;
 	routes = [];
   constructor(private navigationFocusService: NavigationFocusService, public router: Router) {
-		this.routes = router.config.filter( x=>x.path.length && x.path.indexOf(':id')==-1 );
+		this.routes = router.config.filter( x=>x.path.length && x.path!="login" && x.path.indexOf(':id')==-1 );
 		let dflt = this.routes.find( x=>x.component.name==router.config.find( x=>!x.path.length )?.component.name );
 		if( dflt )
 			dflt.default = true;
-		setTimeout(() => this.skipLinkHref = this.navigationFocusService.getSkipLinkHref(), 100);
+		setTimeout( () => this.skipLinkHref = this.navigationFocusService.getSkipLinkHref(), 100 );
   }
 
   get sections() {

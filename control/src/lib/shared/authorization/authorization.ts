@@ -1,17 +1,28 @@
 import {AfterViewInit, Component, NgModule, Inject, OnInit} from '@angular/core';
+import {RouterLink, RouterLinkActive} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
 import { timeout } from 'rxjs/operators';
 import { IAuth } from '../../services/authorization/IAuth';
 import { IEnvironment } from '../../services/environment/IEnvironment';
-declare const google: any;//<script src="https://apis.google.com/js/platform.js" async defer></script>
+//declare const google: any;//<script src="https://apis.google.com/js/platform.js" async defer></script>
 
-@Component({ selector: 'authorization', templateUrl: './authorization.html' })
-export class Authorization implements OnInit, AfterViewInit
+@Component({ selector: 'authorization', templateUrl: './authorization.html', imports: [MatButtonModule,RouterLink,RouterLinkActive,], standalone: true})
+export class Authorization implements OnInit//, AfterViewInit
 {
-	constructor( @Inject('IEnvironment') private env: IEnvironment, @Inject('IAuth') private authorizationService: IAuth )
+	constructor( @Inject('IEnvironment') private env: IEnvironment, @Inject('IAuth') private auth: IAuth )
 	{}
 
 	async ngOnInit(){
-		const googleAuthClientId = await this.authorizationService.googleAuthClientId();
+		this.auth.subscribe().subscribe({
+			next:(login: string) =>{
+				this.text = login;
+			},
+			error:(error: Error) =>{
+				console.log( error.message );
+				this.text = '';
+			}});
+		//this.auth.validateSessionId();
+/*		const googleAuthClientId = await this.authorizationService.googleAuthClientId();
 		if( this.googleCredential )
 			this.handleCredentialResponse( {clientid: googleAuthClientId, client_id: googleAuthClientId, credential: this.googleCredential, select_by: "user" } );
 		else if( google!==undefined ){
@@ -27,10 +38,11 @@ export class Authorization implements OnInit, AfterViewInit
 					{ theme: "outline", size: "large", width: "100%" }
 				);
 				// @t s-ignore
-				google.accounts.id.prompt((notification: any/*PromptMomentNotification*/) => {});
-		}
+				google.accounts.id.prompt((notification: any/*PromptMomentNotification* /) => {});
+		}*/
 	}
-	async handleCredentialResponse(response: any){
+	get text():string{ return this.#text ? this.#text : "Login"; } set text(x){ this.#text=x; } #text:string;
+/*	async handleCredentialResponse(response: any){
 		try{
 			await this.authorizationService.login( response.credential );
 			console.log( "logged in succesfully" );
@@ -57,8 +69,8 @@ export class Authorization implements OnInit, AfterViewInit
 			else
 				this.renderSignin();
 		}
-*/
-	}
+* /
+	}* /
 
 	renderSignin( recursive:number=0 ){
 		try{
@@ -72,7 +84,7 @@ export class Authorization implements OnInit, AfterViewInit
 				{ theme: "outline", size: "large" }  // customization attributes
 			);
 			google.accounts.id.prompt(); // also display the One Tap dialog
-*/
+* /
 			// gapi.signin2.render( 'my-signin2',
 			// {
 			// 	//'scope': 'profile email',
@@ -105,10 +117,7 @@ export class Authorization implements OnInit, AfterViewInit
 		console.log( 'Name: ' + profile.getName() );
 		console.log( 'Image URL: ' + profile.getImageUrl() );
 		console.log( 'Email: ' + profile.getEmail() );
-	*/
+	* /
 	};
-	private get googleCredential(){return this.env.get("googleCredential"); }
+	private get googleCredential(){return this.env.get("googleCredential"); }*/
 }
-@NgModule({ imports: [], exports: [Authorization], declarations: [Authorization], providers: [] })
-export class AuthorizationModule
-{}
