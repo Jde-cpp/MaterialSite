@@ -7,8 +7,7 @@ import { IEnvironment } from '../../services/environment/IEnvironment';
 //declare const google: any;//<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 @Component({ selector: 'authorization', templateUrl: './authorization.html', imports: [MatButtonModule,RouterLink,RouterLinkActive,], standalone: true})
-export class Authorization implements OnInit//, AfterViewInit
-{
+export class Authorization implements OnInit{
 	constructor( @Inject('IEnvironment') private env: IEnvironment, @Inject('IAuth') private auth: IAuth )
 	{}
 
@@ -21,7 +20,12 @@ export class Authorization implements OnInit//, AfterViewInit
 				console.log( error.message );
 				this.text = '';
 			}});
-		//this.auth.validateSessionId();
+		try{
+			this.auth.validateSessionId();
+		}
+		catch( e ){
+			console.trace( e );
+		}
 /*		const googleAuthClientId = await this.authorizationService.googleAuthClientId();
 		if( this.googleCredential )
 			this.handleCredentialResponse( {clientid: googleAuthClientId, client_id: googleAuthClientId, credential: this.googleCredential, select_by: "user" } );
