@@ -16,14 +16,14 @@ export class ComponentPageTitle {
   set title(title: string) {
     this._title = title;
     if (title !== '') {
-      title = title; 
+      //title = `${title} | Angular Material`;
+			title = title; //
     } else {
       title = this._originalTitle;
     }
     this.bodyTitle.setTitle(title);
   }
-	set detail( x:string )
-	{
+	set detail( x:string ){//
 		const main = this.title.includes("|") ? this.title.substring( this.title.lastIndexOf('|') ) : this.title;
 		this.title = `${x} | ${main}`;
  	}

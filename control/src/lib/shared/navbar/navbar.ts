@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
-import {NgIf, NgFor, NgTemplateOutlet} from '@angular/common';
+import {NgTemplateOutlet} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Router, RouterModule} from '@angular/router';
@@ -19,14 +19,12 @@ const SECTIONS_KEYS = Object.keys(SECTIONS);
   standalone: true,
   imports: [
 		Authorization,
-    NgIf,
     MatButtonModule,
     RouterLink,
-    NgFor,
     RouterLinkActive,
-//  VersionPicker,
+//    VersionPicker,
     ThemePicker,
-//  AppLogo,
+//    AppLogo,
     NgTemplateOutlet,
   ],
 })
@@ -41,7 +39,7 @@ export class NavBar implements OnDestroy {
 		let dflt = this.routes.find( x=>x.component.name==router.config.find( x=>!x.path.length )?.component.name );
 		if( dflt )
 			dflt.default = true;
-		setTimeout( () => this.skipLinkHref = this.navigationFocusService.getSkipLinkHref(), 100 );
+    setTimeout(() => this.skipLinkHref = this.navigationFocusService.getSkipLinkHref(), 100);
   }
 
   get sections() {

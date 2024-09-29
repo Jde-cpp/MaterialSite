@@ -1,18 +1,17 @@
-@use '@angular/material' as matOld;
-@use '@angular/material-experimental' as mat;
+@use '@angular/material' as mat;
 @use '../../app-theme';
 
 $theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$m3-rose-palette,
-    tertiary: mat.$m3-red-palette,
+    primary: mat.$rose-palette,
+    tertiary: mat.$red-palette,
   )
 ));
 
-//@include mat.color-variants-backwards-compatibility($theme);
+@include mat.color-variants-backwards-compatibility($theme);
 @include app-theme.theme($theme);
 
 :root {
-  @include matOld.all-component-themes($theme);
+  @include mat.all-component-themes($theme);
 }

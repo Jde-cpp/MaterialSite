@@ -11,8 +11,8 @@ import {Component,
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {CommonModule, NgIf, AsyncPipe, NgFor} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
+import {AsyncPipe} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http'; //
 import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
@@ -25,12 +25,14 @@ import {
   ActivatedRoute,
   Params,
   RouterModule,
-  Router,
+//  Routes,
+	Router,
   RouterOutlet,
   RouterLinkActive,
   RouterLink
 } from '@angular/router';
-import {combineLatest, Observable, Subject,	Subscription} from 'rxjs';
+import {combineLatest, Observable, Subscription} from 'rxjs';
+import {Subject} from 'rxjs';//
 import {map} from 'rxjs/operators';
 
 //import {DocViewerModule} from '../../shared/doc-viewer/doc-viewer-module';
@@ -56,7 +58,7 @@ import {
   ComponentViewer,
   ComponentViewerModule
 } from '../component-viewer/component-viewer';
-*/
+ */
 
 // These constants are used by the ComponentSidenav for orchestrating the MatSidenav in a responsive
 // way. This includes hiding the sidenav, defaulting it to open, changing the mode from over to
@@ -67,15 +69,15 @@ import {
 // src/styles/_constants.scss.
 const EXTRA_SMALL_WIDTH_BREAKPOINT = 720;
 const SMALL_WIDTH_BREAKPOINT = 959;
-export interface DocItem
- {
-	 id: string;
-	 name: string;
-	 summary?: string;
-	 packageName?: string;
-	 examples?: string[];
-	 parentUrl?:boolean;
- }
+export interface DocItem //
+{
+	id: string;
+	name: string;
+	summary?: string;
+	packageName?: string;
+	examples?: string[];
+	parentUrl?:boolean;
+}
 
 @Component({
   selector: 'app-component-sidenav',
@@ -85,7 +87,6 @@ export interface DocItem
   standalone: true,
   imports: [
     MatSidenavModule,
-    NgIf,
     forwardRef(() => ComponentNav),
     ComponentPageHeader,
     RouterOutlet,
@@ -98,11 +99,11 @@ export class ComponentSidenav implements OnInit, OnDestroy {
   params: Observable<Params> | undefined;
   isExtraScreenSmall: Observable<boolean>;
   isScreenSmall: Observable<boolean>;
-  siblings = new Subject<Map<string,string>>();
-  private siblingsSubscription: Subscription;
+  siblings = new Subject<Map<string,string>>(); //
+  private siblingsSubscription: Subscription;  //
   private subscriptions = new Subscription();
 
-  constructor(
+  constructor(//public docItems: DocumentationItems,
               private _route: ActivatedRoute,
               private _navigationFocusService: NavigationFocusService,
               zone: NgZone,
@@ -128,7 +129,7 @@ export class ComponentSidenav implements OnInit, OnDestroy {
         }
       ));
   }
-  public onRouterOutletActivate( event : any ){
+  public onRouterOutletActivate( event : any ){//
 	  this.siblingsSubscription?.unsubscribe();
 	  if( 'siblings' in event ){
 		  this.siblingsSubscription = event.siblings.subscribe( (x)=>{
@@ -161,9 +162,7 @@ export class ComponentSidenav implements OnInit, OnDestroy {
   ],
   standalone: true,
   imports: [
-    NgIf,
     MatListModule,
-    NgFor,
     RouterLinkActive,
     RouterLink,
     AsyncPipe,
@@ -172,13 +171,14 @@ export class ComponentSidenav implements OnInit, OnDestroy {
 export class ComponentNav {
   @Input() params: Observable<Params> | undefined;
   currentItemId: string | undefined;
-	items = new Array<DocItem>();
-	section:string;
-	parentUrl: string;
-	private siblingSubscription: Subscription;
-	@Input() siblingEvents: Observable<Map<string,string>>;
+	items = new Array<DocItem>();//
+	section:string;//
+	parentUrl: string;//
+	private siblingSubscription: Subscription;//
+	@Input() siblingEvents: Observable<Map<string,string>>;//
 
-  constructor(private router: Router, private _route: ActivatedRoute ) {}
+//  constructor(public docItems: DocumentationItems) {}
+constructor(private router: Router, private _route: ActivatedRoute ) {}
 	ngOnDestroy(){ this.siblingSubscription?.unsubscribe(); }
 	ngOnInit(){
 		let self = this;
@@ -208,7 +208,7 @@ export class ComponentNav {
 			}
 		}
 	}
-	
+
 	reload( url ){
 		//debugger;
 		let load = ( config )=>{
@@ -228,7 +228,7 @@ export class ComponentNav {
 		if( this.isRoot(url) )
 			load( this._route.routeConfig );
 	}
-	
+
 	isRoot( url:string ){
 		return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
 	}
@@ -271,16 +271,15 @@ const routes: Routes = [{
     MatSidenavModule,
     MatListModule,
     RouterModule,
-    CommonModule,
     ComponentCategoryListModule,
     //ComponentViewerModule,
     //DocViewerModule,
     FormsModule,
-    HttpClientModule,
     CdkAccordionModule,
     MatIconModule,
     //RouterModule.forChild(routes),
-    ComponentSidenav, ComponentNav
+    ComponentSidenav,
+    ComponentNav
   ],
   exports: [ComponentSidenav],
 })

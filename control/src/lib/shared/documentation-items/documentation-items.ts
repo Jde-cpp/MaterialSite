@@ -55,49 +55,39 @@ export const SECTIONS: { [key: string]: DocSection } = {
 
 
 const DOCS: { [key: string]: DocItem[] } = {
-	[SettingsKey]:
-	[
+  [SettingsKey]: [
 		{id: 'applications',name: 'Applications',summary: 'View Applications.'},
-		{id: 'logs',name: 'Logs',summary: 'View logs.'},
-		{id: 'historian',name: 'Historian',summary: 'View historian.'}
-	],
+		{id: 'logs',name: 'Logs',summary: 'View logs.'}
+  ],
 };
 
 for( let doc of DOCS[SettingsKey] )
-{
-	doc.packageName = SettingsKey;
-}
-/*
-for( let doc of DOCS[BlocklyKey] )
-{
-	doc.packageName = BlocklyKey;
-}*/
+	{
+		doc.packageName = SettingsKey;
+	}
 
-const AllSettings = DOCS[SettingsKey];
-//const AllBlockly = DOCS[BlocklyKey];
-const ALL_DOCS = AllSettings;//.concat(AllBlockly);
+	const AllSettings = DOCS[SettingsKey];
+	const ALL_DOCS = AllSettings;
 
-
-
-@Injectable( {providedIn: 'root'} )
+@Injectable({providedIn: 'root'})
 export class DocumentationItems {
 
   getItems(section: string): DocItem[] {
 	  if (section === SettingsKey) {
 			return AllSettings;
 	 	}
-/*	 if (section === CDK) {
+/*    if (section === CDK) {
       return ALL_CDK;
     }*/
     return [];
   }
 
-	getItemById(id: string, section: string): DocItem | undefined {
+  getItemById(id: string, section: string): DocItem | undefined {
 		let item;
 		if( !item )
 			console.error( "item==null" );
 		return item;
-	}
+  }
 }
 /*
 function processDocs(packageName: string, docs: DocItem[]): DocItem[] {

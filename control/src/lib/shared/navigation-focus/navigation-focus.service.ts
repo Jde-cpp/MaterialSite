@@ -12,11 +12,12 @@ export class NavigationFocusService implements OnDestroy {
   private skipLinkFocusRequests: HTMLElement[] = [];
   private skipLinkHref: string | null | undefined;
 
-  readonly navigationEndEvents = this.router.events
-    .pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd));
-  readonly softNavigations = this.navigationEndEvents.pipe(skip(1));
+  readonly navigationEndEvents;
+  readonly softNavigations;
 
   constructor(private router: Router) {
+		this.navigationEndEvents = this.router.events.pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd));
+		this.softNavigations = this.navigationEndEvents.pipe(skip(1));
     this.subscriptions.add(this.softNavigations.subscribe(() => {
       // focus if url does not have fragment
       if (!this.router.url.split('#')[1]) {
