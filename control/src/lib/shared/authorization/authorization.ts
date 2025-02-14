@@ -6,7 +6,7 @@ import { IAuth } from '../../services/authorization/IAuth';
 import { IEnvironment } from '../../services/environment/IEnvironment';
 //declare const google: any;//<script src="https://apis.google.com/js/platform.js" async defer></script>
 
-@Component({ selector: 'authorization', templateUrl: './authorization.html', imports: [MatButtonModule,RouterLink,RouterLinkActive,], standalone: true})
+@Component({ selector: 'authorization', templateUrl: './authorization.html', imports: [MatButtonModule,RouterLink,RouterLinkActive,]})
 export class Authorization implements OnInit{
 	constructor( @Inject('IEnvironment') private env: IEnvironment, @Inject('IAuth') private auth: IAuth )
 	{}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Routes } from "@angular/router";
+import { ActivatedRoute, Router, Routes } from "@angular/router";
 
 
 export interface IRouteService
@@ -9,6 +9,11 @@ export interface IRouteService
 
 @Injectable()
 export class RouteService implements IRouteService{
-	constructor( private _route: ActivatedRoute ){}
-	children():Promise<Routes>{return Promise.resolve(this._route.parent.routeConfig.children);}
+	constructor( private _router:Router, private route: ActivatedRoute )
+	{}
+	children():Promise<Routes>{
+		return Promise.resolve( this.route.parent.routeConfig
+			? this.route.parent.routeConfig.children
+			: [] );
+	}
 }

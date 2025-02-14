@@ -8,11 +8,10 @@ import { Router } from '@angular/router';
   selector: 'component-page-header',
   templateUrl: './component-page-header.html',
   styleUrls: ['./component-page-header.scss'],
-  standalone: true,
   imports: [MatButtonModule, MatIconModule]
 })
 export class ComponentPageHeader {
-	constructor(public _componentPageTitle: ComponentPageTitle, private router: Router) {}//
+  constructor(public _componentPageTitle: ComponentPageTitle, private router: Router) {}//
   @Output() toggleSidenav = new EventEmitter<void>();
 
   getTitle() {//

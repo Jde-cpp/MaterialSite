@@ -4,6 +4,36 @@
   max-width: 100%;
 }
 
+.docs-api-method-name-cell,
+.docs-api-method-returns-type,
+.docs-api-method-parameter-type,
+.docs-api a {
+  color: var(--mat-sys-primary);
+}
+
+.docs-api-modifier-method-marker {
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+// Force the top-level API docs header to be hidden, since this is already
+// captured in the top nav-bar.
+.docs-api-h1 {
+  display: none !important;
+}
+
+// Prevent p tags from not breaking, causing x axis overflows.
+.docs-api > p {
+  word-break: break-word;
+}
+
+.docs-api-class-name,
+.docs-api-module-import,
+.docs-api-class-selector-name,
+.docs-api-class-export-name {
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 25%, transparent);
+}
+
 // Top header, e.g., "API documentation for dialog".
 .docs-api-h2 {
   font-size: 30px;
@@ -14,6 +44,7 @@
   font-size: 24px;
   font-weight: 400;
   margin-top: 45px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant)
 }
 
 .docs-api-h4 {
@@ -100,8 +131,19 @@
 .docs-api-interface-deprecated-marker {
   display: inline-block;
   font-weight: bold;
+  position: relative;
 
-  &[title] {
+  // We want to set width and height according to our parent
+  // deprecated marker element because the component that presents
+  // the tooltip for depcreated message is empty by default and
+  // empty element can not be able to show up therefore the tooltip
+  // wont show either. This makes sure that our tooltip component
+  // is aligned with deprecated marker in position and size.
+  & .deprecated-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
     border-bottom: 1px dotted grey;
     cursor: help;
   }

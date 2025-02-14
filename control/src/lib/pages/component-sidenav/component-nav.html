@@ -1,17 +1,20 @@
 <div class="docs-component-viewer-nav">
-  <!-- @if ((params | async)?.section; as section) { -->
+  <!-- @if ((params() | async)?.section; as section) { -->
     <div class="docs-component-viewer-nav-content">
         <mat-nav-list>
           @for (component of items; track component) {
-            <a mat-list-item
-               [routerLink]="'/' + section+ '/' + component.id"
+            <a mat-list-item #link="routerLinkActive"
+               [routerLink]="'/' + parentUrl+ '/' + component.id"
+               [activated]="link.isActive"
                routerLinkActive="docs-component-viewer-sidenav-item-selected"
-							 [routerLinkActiveOptions]="{exact: true}"
                [attr.aria-current]="currentItemId === component.id ? 'page': 'false'">
-							 <mat-icon *ngIf="component.parentUrl">arrow_upward</mat-icon>
+               @if(component.parentUrl){
+                  <mat-icon>arrow_upward</mat-icon>
+               }
               {{component.name}}
             </a>
-          }
+            <!--[routerLinkActiveOptions]="{exact: true}" -->
+					}
         </mat-nav-list>
     </div>
   <!-- } -->
