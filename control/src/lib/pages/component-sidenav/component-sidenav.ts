@@ -28,11 +28,12 @@ import {
   RouterOutlet,
   RouterLinkActive,
   RouterLink,
-  UrlSegment
+  UrlSegment,
+	ActivationEnd
 } from '@angular/router';
 import {combineLatest, Observable, Subscription} from 'rxjs';
 import {Subject} from 'rxjs';//
-import {map} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 
 //import {DocViewerModule} from '../../shared/doc-viewer/doc-viewer-module';
 import {
@@ -75,8 +76,9 @@ export interface DocItem //
 	name: string;
 	summary?: string;
 	packageName?: string;
-	examples?: string[];
+	//examples?: string[];
 	parentUrl?:boolean;
+	excludedColumns?:string[];
 }
 
 @Component({
@@ -89,7 +91,7 @@ export interface DocItem //
     forwardRef(() => ComponentNav),
     ComponentPageHeader,
     RouterOutlet,
-    Footer,
+//    Footer,
     AsyncPipe,
   ],
 })
@@ -150,6 +152,11 @@ export class ComponentSidenav implements OnInit, OnDestroy {
   }
 }
 
+interface Breadcrumb {
+  label: string;
+  url: string;
+}
+
 @Component({
   selector: 'app-component-nav',
   templateUrl: './component-nav.html',
@@ -164,6 +171,7 @@ export class ComponentSidenav implements OnInit, OnDestroy {
     MatListModule,
     RouterLinkActive,
     RouterLink,
+		MatIconModule
    // AsyncPipe,
   ],
 })
@@ -174,10 +182,18 @@ export class ComponentNav {
 	section:string;//
 	parentUrl: string;//
 	private siblingSubscription: Subscription;//
-	@Input() siblingEvents: Observable<Map<string,string>>;//
+//	@Input() siblingEvents: Observable<Map<string,string>>;//
+  routerSubscription: Subscription;
+	breadcrumbs: Breadcrumb[] = [];
 
  // constructor(public docItems: DocumentationItems) {}
-  constructor(private router: Router, private route: ActivatedRoute ) {}
+  constructor(private router: Router, private route: ActivatedRoute ){
+//		console.log( `ComponentNav::constructor` );
+/*		this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof ActivationEnd),
+			map(event => this.buildBreadcrumb(this.route.root))
+    ).subscribe(breadcrumbs => this.breadcrumbs = breadcrumbs);*/
+	}
   subscribe( route: ActivatedRoute, who: string ){
     route.title.subscribe( (x)=>{
       console.log( `${who}.title: ${JSON.stringify(x)}` );
@@ -208,7 +224,7 @@ export class ComponentNav {
   ngOnDestroy(){ this.siblingSubscription?.unsubscribe(); }
   ngOnInit(){
     //this.subscribe( this.route, "this" );
-    this.siblingSubscription = this.siblingEvents?.subscribe( this.loadSiblings );
+    //this.siblingSubscription = this.siblingEvents?.subscribe( this.loadSiblings );
     /*const children:Routes = this.route.routeConfig.children;
     for( const child of children ){
       if( child.path.endsWith(":id") )
@@ -227,8 +243,33 @@ export class ComponentNav {
     });*/
     this.parentUrl = this.section = this.route.routeConfig.path;
     this.reload( `/${this.parentUrl}` );
- };
- loadSiblings = ( e:Map<string,string> )=>{
+ 	};
+/*	buildBreadcrumb(route: ActivatedRoute, url: string = '', breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
+    // Get the route config data
+    let label = route.routeConfig && route.routeConfig.data ? route.routeConfig.data['breadcrumb'] : '';
+    let path = route.routeConfig && route.routeConfig.path ? route.routeConfig.path : '';
+
+    // If the route is dynamic route such as '/product/:id', remove it
+    const isDynamic = path.includes(":");
+    path = isDynamic ? null : path;
+
+    // In the last level, if there is no label, use the path as empty
+    const nextUrl = path ? `${url}/${path}` : url;
+
+    // If the route config data contains a breadcrumb property, update the breadcrumbs array
+    if (label && !isDynamic) {
+      breadcrumbs.push({ label: label, url: nextUrl });
+    }
+
+    if (route.firstChild) {
+      // If there are more children, recurse to build the breadcrumb
+      return this.buildBreadcrumb(route.firstChild, nextUrl, breadcrumbs);
+    }
+		console.log( `ComponentNav::buildBreadcrumb url=${url} breadcrumbs=${JSON.stringify(breadcrumbs)}` );
+    return breadcrumbs;
+  }
+*/
+ 	loadSiblings = ( e:Map<string,string> )=>{
    if( !e )
      this.reload( `/${this.parentUrl}` );
    else{
@@ -252,7 +293,7 @@ export class ComponentNav {
        //let docItem:DocItem = <DocItem>x.data ?? { id: "", name: x.path };
        const docItem:DocItem = <DocItem>{
         ...{name: x.title, id: x.path},
-        ...x.data["pageSettings"] ?? {}
+        ...(x.data ? x.data["pageSettings"] ?? {} : {})
       };
       if( x.path.startsWith(':') ){
         var x2 = this.router.config;

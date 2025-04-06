@@ -60,7 +60,7 @@ export class NavBar implements OnDestroy {
   }
 
   name( route:Route ):string{
-    return route.title.valueOf() as string;
+    return route.title?.valueOf() as string;
   }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

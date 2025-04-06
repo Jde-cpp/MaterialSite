@@ -39,42 +39,47 @@ export class ComponentCategoryList implements OnInit/*, OnDestroy*/ {
   }
 
   /*async*/ ngOnInit() {
+		console.log( `ComponentCategoryList::ngOnInit start` );
     // Combine params from all of the path into a single object.
     this.params = combineLatest(
       this.route.pathFromRoot.map(route => route.params),
       Object.assign);
-    this.route.url.subscribe( (urls:UrlSegment[]) => {
-      let msg = urls.map( x=>x.path ).join('/');
-      console.log( `ComponentCategoryList::Url '${msg}'` );
-    });
-
-    console.log( `ComponentCategoryList::ngOnInit start` );
-		//const children = await this.routeService.children(); //
-    if( this.route.parent.routeConfig ){
-      for( let child of this.route.parent.routeConfig.children.filter((x)=>
-				x.path.length && !x.path.endsWith("/:id") && !x.path.endsWith("/:target") ) ){
-			  let docItem = <DocItem>(child.data["pageSettings"] ?? {}); //
-        docItem.id = child.path; //
-        docItem.name = <string>child["title"]; //
-				this.items.push( docItem ); //
-      }
-    }else{
-      for( let config of this.router.config.filter( x=> x.data && x.path.length && x.path!="login" ) ){
-        let pageSettings = config.data["pageSettings"];
-        this.items.push( <DocItem>{ id: config.path, name: config.title, summary: pageSettings?.summary } );
-      }
-    }
-		const section = { name: this.route.data["value"].name, summary: this.route.data["value"].summary }; //
-		this._componentPageTitle.title = section.name; ////
-		this._categoryListSummary = section.summary; //
-    // title on topbar navigation
-    this.routeParamSubscription = this.params.subscribe(params => {
-      console.log( `ComponentCategoryList::params ${JSON.stringify(params)}` );
-    //  const sectionName = params['section'];
-    //  const section = SECTIONS[sectionName];
-    //  this._componentPageTitle.title = section.name;
-    //  this._categoryListSummary = section.summary;
-    });
+		if( this.route.parent.routeConfig ){//top menu items.
+			for( let child of this.route.parent.routeConfig.children.filter((x)=>
+					x.path.length && !x.path.endsWith("/:id") && !x.path.endsWith("/:target") ) ){
+					if( child.path==":type" ){
+						for( let type of child.data["types"] ){
+							if( typeof type=='string' )
+								this.items.push( <DocItem>{ id: type, name: type.charAt(0).toUpperCase()+type.slice(1) } );
+							else{
+								this.items.push( <DocItem>type );
+							}
+						}
+					}
+					else{
+						let docItem = <DocItem>(child.data["pageSettings"] ?? {}); //
+						docItem.id = child.path; //
+						docItem.name = <string>child["title"]; //
+						this.items.push( docItem ); //
+					}
+				}
+			}else{//Home component.
+				for( let config of this.router.config.filter( x=> x.data && x.path.length && x.path!="login" ) ){
+					let pageSettings = config.data["pageSettings"];
+					this.items.push( <DocItem>{ id: config.path, name: config.title, summary: pageSettings?.summary } );
+				}
+			}
+			const section = { name: this.route.data["value"].name, summary: this.route.data["value"].summary }; //
+			this._componentPageTitle.title = section.name; ////
+			this._categoryListSummary = section.summary; //
+			// title on topbar navigation
+			this.routeParamSubscription = this.params.subscribe(params => {
+				console.log( `ComponentCategoryList::params ${JSON.stringify(params)}` );
+			//  const sectionName = params['section'];
+			//  const section = SECTIONS[sectionName];
+			//  this._componentPageTitle.title = section.name;
+			//  this._categoryListSummary = section.summary;
+		});
   }
 
   //ngOnDestroy() {
