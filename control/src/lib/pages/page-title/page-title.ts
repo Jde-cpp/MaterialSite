@@ -24,8 +24,8 @@ export class ComponentPageTitle {
     this.bodyTitle.setTitle(title);
   }
 	set detail( x:string ){//
-		const main = this.title?.includes("|") ? this.title.substring( this.title.lastIndexOf('|') ) : this.title;
-		this.title = `${x} | ${main}`;
+		//const main = this.title?.includes("|") ? this.title.substring( this.title.lastIndexOf('|') ) : this.title;
+		this.title = `${x}`;
  	}
   constructor(private bodyTitle: Title) {}
 }

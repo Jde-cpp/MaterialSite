@@ -39,20 +39,23 @@ export class ComponentCategoryList implements OnInit/*, OnDestroy*/ {
   }
 
   /*async*/ ngOnInit() {
-		console.log( `ComponentCategoryList::ngOnInit start` );
     // Combine params from all of the path into a single object.
     this.params = combineLatest(
       this.route.pathFromRoot.map(route => route.params),
       Object.assign);
 		if( this.route.parent.routeConfig ){//top menu items.
 			for( let child of this.route.parent.routeConfig.children.filter((x)=>
-					x.path.length && !x.path.endsWith("/:id") && !x.path.endsWith("/:target") ) ){
-					if( child.path==":type" ){
-						for( let type of child.data["types"] ){
-							if( typeof type=='string' )
-								this.items.push( <DocItem>{ id: type, name: type.charAt(0).toUpperCase()+type.slice(1) } );
-							else{
-								this.items.push( <DocItem>type );
+					x.path.length && !x.path.endsWith("/:target") /*&& !x.path.endsWith("/:collectionName")*/ ) ){
+					if( child.path==":collectionDisplay" ){
+						for( let collection of child.data["collections"] ){
+							if( typeof collection=='string' ){
+								const upper = collection.charAt( 0 ).toUpperCase()+collection.slice( 1 );
+								this.items.push( <DocItem>{  id: collection, name: upper } );
+							}else{
+								const upper = collection.id.charAt( 0 ).toUpperCase()+collection.id.slice( 1 );
+								collection.name = collection.name ?? upper;
+								collection.collectionName = collection.collectionName ?? collection.id;
+								this.items.push( <DocItem>collection );
 							}
 						}
 					}
@@ -74,7 +77,7 @@ export class ComponentCategoryList implements OnInit/*, OnDestroy*/ {
 			this._categoryListSummary = section.summary; //
 			// title on topbar navigation
 			this.routeParamSubscription = this.params.subscribe(params => {
-				console.log( `ComponentCategoryList::params ${JSON.stringify(params)}` );
+				//console.log( `ComponentCategoryList::params ${JSON.stringify(params)}` );
 			//  const sectionName = params['section'];
 			//  const section = SECTIONS[sectionName];
 			//  this._componentPageTitle.title = section.name;

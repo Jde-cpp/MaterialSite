@@ -72,8 +72,9 @@ const EXTRA_SMALL_WIDTH_BREAKPOINT = 720;
 const SMALL_WIDTH_BREAKPOINT = 959;
 export interface DocItem //
 {
-	id: string;
-	name: string;
+	id: string; //access (home), users (access)
+	name: string; //Users
+	collectionName?: string; //users
 	summary?: string;
 	packageName?: string;
 	//examples?: string[];
@@ -286,28 +287,31 @@ export class ComponentNav {
  }
 
  reload( url ){
-   //debugger;
-   let load = ( config )=>{
+  let load = ( config )=>{
      this.items.length = 0;
-     for( let x of config.children.filter((x)=>!x.path.endsWith(":id") && !x.path.endsWith(":target")) ){
-       //let docItem:DocItem = <DocItem>x.data ?? { id: "", name: x.path };
-       const docItem:DocItem = <DocItem>{
-        ...{name: x.title, id: x.path},
-        ...(x.data ? x.data["pageSettings"] ?? {} : {})
-      };
-      if( x.path.startsWith(':') ){
-        var x2 = this.router.config;
-        continue;
+     for( let x of config.children.filter((x)=>!x.path.endsWith(":target")) ){
+      if( x.path==":collectionDisplay" ){
+				for( const collection of x.data.collections ){
+					const id = typeof collection == "string" ? collection : collection["id"];
+					this.items.push( {
+						id: id,
+						name: id.charAt(0).toUpperCase() + id.slice(1)
+					} );
+        }
       }
-      docItem.id = x.path;
-      //console.log( `ComponentNav::reload id=${docItem.id} name=${docItem.name} parentUrl=${docItem.parentUrl}` );
-      if( x.path.length )
-        this.items.push( docItem );
-     }
-   }
-   if( this.isRoot(url) )
-     load( this.route.routeConfig );
- }
+			else if( x.path.length ){
+				const docItem:DocItem = <DocItem>{
+        	...{name: x.title, id: x.path},
+        	...(x.data ? x.data["pageSettings"] ?? {} : {})
+      	};
+	      docItem.id = x.path;
+   	    this.items.push( docItem );
+			}
+    }
+  }
+	if( this.isRoot(url) )
+		load( this.route.routeConfig );
+}
 
   isRoot( url:string ){
     return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
