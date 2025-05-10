@@ -2,13 +2,15 @@
 <!-- <div class="g-signin2" id="google-button"></div> -->
 
 @if( !providers.isLoading() ) {
-	@if(user()?.pictureUrl) {
+	@if( user()?.pictureUrl ){
 		<a mat-list-item routerLink="login" routerLinkActive="docs-navbar-header-item-selected">
 			<img class="profile-picture" [src]="user().pictureUrl">
 		</a>
-		<!-- <a mat-list-item (click)=onLogout()>
-			<mat-icon>exit_to_app</mat-icon>
-		</a> -->
+	}
+	@else if( user()?.name ){
+		<a mat-list-item routerLink="login" routerLinkActive="docs-navbar-header-item-selected">
+			{{`${user().domain}/${user().name}`}}
+		</a>
 	}
 	@else {
 		<a mat-list-item routerLink="login">

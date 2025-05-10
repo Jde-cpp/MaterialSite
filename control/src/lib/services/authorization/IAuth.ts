@@ -1,5 +1,4 @@
 import { Signal } from '@angular/core';
-import { IEnum } from 'jde-framework';
 
 export enum EProvider{
 	None = 0,
@@ -13,30 +12,24 @@ export enum EProvider{
 };
 
 export type LoggedInUser = {
-  id?: string;
+  id?: string; //loginName
 	authorization?: string; //sessionId
-	credential?: string;
+	credential?: string; //jwt token
 	domain?: string;
 	expiration?: Date;
   email?: string;
 	name?: string;
   pictureUrl?: string;
 	provider?: EProvider;
-	serverInstance?:number;
+	serverInstances?:{url:string,instance:number}[];
 }
 
 export interface IAuth{
 	loginGoogle( user:LoggedInUser ):Promise<void>;
 	loginPassword( username:string, password:string, authenticator:string ):Promise<void>;
-	logout():Promise<void>;
+	logout( user:LoggedInUser ):Promise<void>;
 	providers():Promise<EProvider[]>;
 	validateSessionId():void;
-	//subscribe():Observable<string>;
 	googleAuthClientId():Promise<string>;
-	//onLogout():void;
-	//get sessionId(); set sessionId(x:string);
-	//readonly enabled:boolean;
-	//loggedIn:boolean;
-	//idToken:string;
 	user:Signal<LoggedInUser | null>;
 }

@@ -1,21 +1,25 @@
-<div class="docs-component-viewer-nav">
-  <!-- @if ((params() | async)?.section; as section) { -->
-    <div class="docs-component-viewer-nav-content">
-        <mat-nav-list>
-          @for (component of items; track component) {
-            <a mat-list-item #link="routerLinkActive"
-               [routerLink]="'/' + parentUrl+ '/' + component.id"
-               [activated]="link.isActive"
-               routerLinkActive="docs-component-viewer-sidenav-item-selected"
-               [attr.aria-current]="currentItemId === component.id ? 'page': 'false'">
-               @if(component.parentUrl){
-                  <mat-icon>arrow_upward</mat-icon>
-               }
-              {{component.name}}
-            </a>
-            <!--[routerLinkActiveOptions]="{exact: true}" -->
-					}
-        </mat-nav-list>
-    </div>
-  <!-- } -->
-</div>
+@if( !isLoading() ){
+	<div class="docs-component-viewer-nav">
+		<div class="docs-component-viewer-nav-content">
+			<mat-nav-list>
+				@if( items()().parent ){
+					<a mat-list-item
+							[routerLink]="'/' + parentUrl+ '/'+ items()().parent.path"
+							[attr.aria-current]="'false'">
+						{{items()().parent.title}}
+					</a>
+				}
+				@for (component of items()().siblings; track component.path) {
+					<a mat-list-item #link="routerLinkActive"
+							[ngClass]="{ 'child-nav': items()().parent }"
+							[routerLink]="'/' + parentUrl+ '/' + component.path"
+							[activated]="link.isActive"
+							routerLinkActive="docs-component-viewer-sidenav-item-selected"
+							[attr.aria-current]="currentItemId === component.path ? 'page': 'false'">
+						{{component.title}}
+					</a>
+				}
+			</mat-nav-list>
+		</div>
+	</div>
+}
