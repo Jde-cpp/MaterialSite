@@ -34,11 +34,6 @@ import {combineLatest, Observable, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {
-  DocumentationItems
-} from '../../shared/documentation-items/documentation-items';
-import {Footer} from '../../shared/footer/footer';
-
-import {
   NavigationFocusService
 } from '../../shared/navigation-focus/navigation-focus.service';
 
@@ -57,12 +52,18 @@ import { IRouteService, RouteService } from '../../services/IRouteService';
 // src/styles/_constants.scss.
 const EXTRA_SMALL_WIDTH_BREAKPOINT = 720;
 const SMALL_WIDTH_BREAKPOINT = 959;
-export interface DocItem{ //
-	path: string; ///routerLink - access/groups or relative
-	title: string; //Groups
+export class DocItem{ //
+	constructor( args?:Partial<DocItem>){
+		if( args )
+			Object.assign( this, args );
+	}
+	get path(){ return this._path; } set path(x){ this._path=x; } private _path: string; //routerLink - access/groups or relative
+	get title(){ return this._title; } set title(x){ this._title=x; } private _title: string;
+	get queryParams(){ return this._queryParams; } set queryParams(x){ this._queryParams=x; } private _queryParams: Params;
 	summary?: string;
 	parent?:DocItem;
 	siblings?:DocItem[]; //includes this.
+	get track(){ return this.queryParams ? this.path+JSON.stringify(this.queryParams) : this.path; }
 	excludedColumns?:string[];
 }
 
@@ -80,7 +81,7 @@ export class ComponentSidenav implements OnInit, OnDestroy {
   isExtraScreenSmall: Observable<boolean>;
   isScreenSmall: Observable<boolean>;
   private subscriptions = new Subscription();
-	items = model<DocItem>(null);
+	item = model<DocItem>(null);
   constructor( private _route: ActivatedRoute,
               private _navigationFocusService: NavigationFocusService,
               zone: NgZone,
@@ -110,7 +111,7 @@ export class ComponentSidenav implements OnInit, OnDestroy {
   }
   onRouterOutletActivate( event : any ){//
 		if( 'sideNav' in event ){
-			event.sideNav = this.items;
+			event.sideNav = this.item;
 		}
 		else
 			debugger;
@@ -140,9 +141,7 @@ export class ComponentSidenav implements OnInit, OnDestroy {
 export class ComponentNav {
   constructor(private router: Router, private route: ActivatedRoute ){
 		effect(() => {
-			this.isLoading.set( this.items()()==null );
-			if( this.items()()!=null )
-					console.log( `ComponentNav items` );
+			this.isLoading.set( this.item()()==null );
 		});
 	}
   ngOnInit(){
@@ -152,7 +151,7 @@ export class ComponentNav {
     return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
   }
   currentItemId: string | undefined;
-	items = input.required<Signal<DocItem>>();
+	item = input.required<Signal<DocItem>>();
 	parentUrl: string;
 	isLoading = signal( true );
 }

@@ -2,19 +2,22 @@
 	<div class="docs-component-viewer-nav">
 		<div class="docs-component-viewer-nav-content">
 			<mat-nav-list>
-				@if( items()().parent ){
+				@if( item()().parent ){
 					<a mat-list-item
-							[routerLink]="'/' + parentUrl+ '/'+ items()().parent.path"
+							[routerLink]="'/' + parentUrl+ '/'+ item()().parent.path"
+							[queryParams]="item()().parent.queryParams"
 							[attr.aria-current]="'false'">
-						{{items()().parent.title}}
+						{{item()().parent.title}}
 					</a>
 				}
-				@for (component of items()().siblings; track component.path) {
+				@for (component of item()().siblings; track component.track) {
 					<a mat-list-item #link="routerLinkActive"
-							[ngClass]="{ 'child-nav': items()().parent }"
+							[ngClass]="{ 'child-nav': item()().parent }"
 							[routerLink]="'/' + parentUrl+ '/' + component.path"
+							[queryParams]="component.queryParams"
 							[activated]="link.isActive"
 							routerLinkActive="docs-component-viewer-sidenav-item-selected"
+							[routerLinkActiveOptions]="{ matrixParams:'ignored', queryParams: 'exact', paths: 'exact', fragment: 'ignored' }"
 							[attr.aria-current]="currentItemId === component.path ? 'page': 'false'">
 						{{component.title}}
 					</a>
