@@ -1,64 +1,47 @@
-import {Component,
-  Input,
+import {
+  Component,
   NgModule,
   NgZone,
   OnDestroy,
   OnInit,
-  ViewChild,
+  Signal,
   ViewEncapsulation,
-  forwardRef
+  effect,
+  forwardRef,
+  input,
+  model,
+  signal,
+  viewChild
 } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {AsyncPipe} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http'; //
+import {AsyncPipe, NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
-import {
-  MatSidenav,
-  MatSidenavModule,
-  MatDrawerToggleResult,
-} from '@angular/material/sidenav';
+import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {
   ActivatedRoute,
   Params,
   RouterModule,
-//  Routes,
-	Router,
+  Router,
   RouterOutlet,
   RouterLinkActive,
-  RouterLink
+  RouterLink,
 } from '@angular/router';
 import {combineLatest, Observable, Subscription} from 'rxjs';
-import {Subject} from 'rxjs';//
 import {map} from 'rxjs/operators';
-
-//import {DocViewerModule} from '../../shared/doc-viewer/doc-viewer-module';
-import {
-  DocumentationItems
-} from '../../shared/documentation-items/documentation-items';
-import {Footer} from '../../shared/footer/footer';
 
 import {
   NavigationFocusService
 } from '../../shared/navigation-focus/navigation-focus.service';
 
 import {
-  ComponentCategoryList,
   ComponentCategoryListModule
 } from '../component-category-list/component-category-list';
 import {ComponentPageHeader} from '../component-page-header/component-page-header';
-/*
-import {
-  ComponentApi,
-  ComponentExamples,
-  ComponentOverview,
-  ComponentViewer,
-  ComponentViewerModule
-} from '../component-viewer/component-viewer';
- */
+import { IRouteService, RouteService } from '../../services/IRouteService';
 
 // These constants are used by the ComponentSidenav for orchestrating the MatSidenav in a responsive
 // way. This includes hiding the sidenav, defaulting it to open, changing the mode from over to
@@ -69,50 +52,46 @@ import {
 // src/styles/_constants.scss.
 const EXTRA_SMALL_WIDTH_BREAKPOINT = 720;
 const SMALL_WIDTH_BREAKPOINT = 959;
-export interface DocItem //
-{
-	id: string;
-	name: string;
+export class DocItem{ //
+	constructor( args?:Partial<DocItem>){
+		if( args )
+			Object.assign( this, args );
+	}
+	get path(){ return this._path; } set path(x){ this._path=x; } private _path: string; //routerLink - access/groups or relative
+	get title(){ return this._title; } set title(x){ this._title=x; } private _title: string;
+	get queryParams(){ return this._queryParams; } set queryParams(x){ this._queryParams=x; } private _queryParams: Params;
 	summary?: string;
-	packageName?: string;
-	examples?: string[];
-	parentUrl?:boolean;
+	parent?:DocItem;
+	siblings?:DocItem[]; //includes this.
+	get track(){ return this.queryParams ? this.path+JSON.stringify(this.queryParams) : this.path; }
+	excludedColumns?:string[];
 }
 
+// Sidebar + router_outlet
 @Component({
   selector: 'app-component-sidenav',
   templateUrl: './component-sidenav.html',
   styleUrls: ['./component-sidenav.scss'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [
-    MatSidenavModule,
-    forwardRef(() => ComponentNav),
-    ComponentPageHeader,
-    RouterOutlet,
-    Footer,
-    AsyncPipe,
-  ],
+  imports: [ MatSidenavModule, forwardRef(() => ComponentNav), ComponentPageHeader, RouterOutlet, AsyncPipe ],
 })
 export class ComponentSidenav implements OnInit, OnDestroy {
-  @ViewChild(MatSidenav) sidenav!: MatSidenav;
+  readonly sidenav = viewChild(MatSidenav);
   params: Observable<Params> | undefined;
   isExtraScreenSmall: Observable<boolean>;
   isScreenSmall: Observable<boolean>;
-  siblings = new Subject<Map<string,string>>(); //
-  private siblingsSubscription: Subscription;  //
   private subscriptions = new Subscription();
-
-  constructor(//public docItems: DocumentationItems,
-              private _route: ActivatedRoute,
+	item = model<DocItem>(null);
+  constructor( private _route: ActivatedRoute,
               private _navigationFocusService: NavigationFocusService,
               zone: NgZone,
-              breakpoints: BreakpointObserver) {
+              breakpoints: BreakpointObserver,
+							private router: Router/*,
+							@Optional() @Inject('IRouteService') private routeService:IRouteService*/) {
     this.isExtraScreenSmall =
         breakpoints.observe(`(max-width: ${EXTRA_SMALL_WIDTH_BREAKPOINT}px)`)
             .pipe(map(breakpoint => breakpoint.matches));
-    this.isScreenSmall = breakpoints.observe(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`)
-    .pipe(map(breakpoint => breakpoint.matches));
+    this.isScreenSmall = breakpoints.observe(`(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`).pipe(map(breakpoint => breakpoint.matches));
   }
 
   ngOnInit() {
@@ -123,36 +102,33 @@ export class ComponentSidenav implements OnInit, OnDestroy {
     this.subscriptions.add(
       this._navigationFocusService.navigationEndEvents.pipe(map(() => this.isScreenSmall))
       .subscribe((shouldCloseSideNav) => {
-          if (shouldCloseSideNav && this.sidenav) {
-            this.sidenav.close();
+          const sidenav = this.sidenav();
+          if (shouldCloseSideNav && sidenav) {
+            sidenav.close();
           }
         }
-      ));
+    ));
   }
-  public onRouterOutletActivate( event : any ){//
-	  this.siblingsSubscription?.unsubscribe();
-	  if( 'siblings' in event ){
-		  this.siblingsSubscription = event.siblings.subscribe( (x)=>{
-			  //~~~debugger;
-			  this.siblings.next(x);
-		  } );
-	  }
-	  else
-		  this.siblings.next( null );
-  }
-
+  onRouterOutletActivate( event : any ){//
+		if( 'sideNav' in event ){
+			event.sideNav = this.item;
+		}
+		else
+			debugger;
+	}
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  toggleSidenav(sidenav: MatSidenav): Promise<MatDrawerToggleResult> {
-    return sidenav.toggle();
+  toggleSidenav(): void {
+    this.sidenav()?.toggle();
   }
 }
 
 @Component({
   selector: 'app-component-nav',
   templateUrl: './component-nav.html',
+	styles: [`.child-nav { margin-left: 15px; }`],
   animations: [
     trigger('bodyExpansion', [
       state('collapsed', style({ height: '0px', display: 'none' })),
@@ -160,124 +136,35 @@ export class ComponentSidenav implements OnInit, OnDestroy {
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4,0.0,0.2,1)')),
     ]),
   ],
-  standalone: true,
-  imports: [
-    MatListModule,
-    RouterLinkActive,
-    RouterLink,
-    AsyncPipe,
-  ],
+  imports: [ MatIconModule, MatListModule, NgClass, RouterLinkActive, RouterLink ],
 })
 export class ComponentNav {
-  @Input() params: Observable<Params> | undefined;
+  constructor(private router: Router, private route: ActivatedRoute ){
+		effect(() => {
+			this.isLoading.set( this.item()()==null );
+		});
+	}
+  ngOnInit(){
+    this.parentUrl = this.route.routeConfig.path; //appRouting path before children
+ 	};
+  isRoot( url:string ){
+    return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
+  }
   currentItemId: string | undefined;
-	items = new Array<DocItem>();//
-	section:string;//
-	parentUrl: string;//
-	private siblingSubscription: Subscription;//
-	@Input() siblingEvents: Observable<Map<string,string>>;//
-
-//  constructor(public docItems: DocumentationItems) {}
-constructor(private router: Router, private _route: ActivatedRoute ) {}
-	ngOnDestroy(){ this.siblingSubscription?.unsubscribe(); }
-	ngOnInit(){
-		let self = this;
-		this.siblingSubscription = this.siblingEvents?.subscribe( this.loadSiblings );
-		//this.router.events.pipe( filter(e=>e instanceof NavigationEnd) ).subscribe( this.onNavigationEnd );
-		/*	(val) =>
-		{
-			if( val instanceof NavigationEnd )
-				debugger;
-		});*/
-		this.parentUrl = this.section = this._route.routeConfig.path;
-		//console.log( `ComponentNav::ngOnInit parentUrl=${this.parentUrl}` );
-		this.reload( `/${this.parentUrl}` );
-	};
-	loadSiblings = ( e:Map<string,string> )=>{
-		if( !e )
-			this.reload( `/${this.parentUrl}` );
-		else{
-			this.items.length = 0;
-			let parent = '';
-			for( const [target,name] of e ){
-				var docItem = { id: parent+target, name: name, parentUrl: !parent.length };
-				console.log( `ComponentNav::loadSiblings id=${docItem.id} name=${docItem.name} parentUrl=${docItem.parentUrl}` );
-				this.items.push( docItem );
-				if( !parent )
-					parent = `${target}/`;
-			}
-		}
-	}
-
-	reload( url ){
-		//debugger;
-		let load = ( config )=>{
-			this.items.length = 0;
-			for( let x of config.children.filter((x)=>!x.path.endsWith(":id")) ){
-				let docItem:DocItem = <DocItem>x.data ?? { id: "", name: x.path };
-				if( x.path.startsWith(':') ){
-					var x2 = this.router.config;
-					continue;
-				}
-				docItem.id = x.path;
-				console.log( `reload id=${docItem.id} name=${docItem.name} parentUrl=${docItem.parentUrl}` );
-				if( x.path.length )
-					this.items.push( docItem );
-			}
-		}
-		if( this.isRoot(url) )
-			load( this._route.routeConfig );
-	}
-
-	isRoot( url:string ){
-		return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;
-	}
-/*	 onNavigationEnd =( val:NavigationEnd )=>
-	{
-//		if( !this.isRoot(val.url) )
-//			this.reload( val.url.substr(1) );
-	}*/
+	item = input.required<Signal<DocItem>>();
+	parentUrl: string;
+	isLoading = signal( true );
 }
 
-/*
-const routes: Routes = [{
-  path: '',
-  component: ComponentSidenav,
-  children: [
-    {path: 'component/:id', redirectTo: ':id', pathMatch: 'full'},
-    {path: 'category/:id', redirectTo: '/categories/:id', pathMatch: 'full'},
-    {
-      path: 'categories',
-      children: [
-        {path: '', component: ComponentCategoryList},
-      ],
-    },
-    {
-      path: ':id',
-      component: ComponentViewer,
-      children: [
-        {path: '', redirectTo: 'overview', pathMatch: 'full'},
-        {path: 'overview', component: ComponentOverview, pathMatch: 'full'},
-        {path: 'api', component: ComponentApi, pathMatch: 'full'},
-        {path: 'examples', component: ComponentExamples, pathMatch: 'full'}
-      ],
-    },
-    {path: '**', redirectTo: '/404'}
-  ]
-}];
-*/
 @NgModule({
   imports: [
     MatSidenavModule,
     MatListModule,
     RouterModule,
     ComponentCategoryListModule,
-    //ComponentViewerModule,
-    //DocViewerModule,
     FormsModule,
     CdkAccordionModule,
     MatIconModule,
-    //RouterModule.forChild(routes),
     ComponentSidenav,
     ComponentNav
   ],

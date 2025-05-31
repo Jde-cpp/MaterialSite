@@ -1,16 +1,35 @@
-import { Observable } from "rxjs";
+import { Signal } from '@angular/core';
+
+export enum EProvider{
+	None = 0,
+	Google=1,
+	Facebook=2,
+	Amazon=3,
+	Microsoft=4,
+	VK=5,
+	Key = 6,
+	OpcServer = 7
+};
+
+export type LoggedInUser = {
+  id?: string; //loginName
+	authorization?: string; //sessionId
+	credential?: string; //jwt token
+	domain?: string;
+	expiration?: Date;
+  email?: string;
+	name?: string;
+  pictureUrl?: string;
+	provider?: EProvider;
+	serverInstances?:{url:string,instance:number}[];
+}
 
 export interface IAuth{
-	login( token?:string ):Promise<void>;
+	loginGoogle( user:LoggedInUser ):Promise<void>;
 	loginPassword( username:string, password:string, authenticator:string ):Promise<void>;
-	subscribe():Observable<string>;
-	googleAuthClientId():Promise<string>;
-	onLogout():void;
+	logout( user:LoggedInUser ):Promise<void>;
+	providers():Promise<EProvider[]>;
 	validateSessionId():void;
-
-	//get sessionId(); set sessionId(x:string);
-
-	readonly enabled:boolean;
-	loggedIn:boolean;
-	idToken:string;
+	googleAuthClientId():Promise<string>;
+	user:Signal<LoggedInUser | null>;
 }

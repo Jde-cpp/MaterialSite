@@ -3,8 +3,7 @@ import {NavigationFocusService} from './navigation-focus.service';
 
 let uid = 0;
 @Directive({
-  selector: '[focusOnNavigation]',
-  standalone: true,
+  selector: '[focusOnNavigation]'
 })
 export class NavigationFocus implements OnDestroy {
   @HostBinding('tabindex') readonly tabindex = '-1';
@@ -23,4 +22,3 @@ export class NavigationFocus implements OnDestroy {
     this.navigationFocusService.relinquishSkipLinkFocus(this.el.nativeElement);
   }
 }
-

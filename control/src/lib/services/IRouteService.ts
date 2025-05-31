@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Routes, UrlSegment } from "@angular/router";
+import { ActivatedRoute, Router, Routes, UrlSegment } from "@angular/router";
 import { DocItem } from 'jde-material';
 
 

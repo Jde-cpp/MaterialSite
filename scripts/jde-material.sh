@@ -18,6 +18,6 @@ mv temp.json angular.json;
 #cd src;moveToDir assets;moveToDir img; addHard theme-demo-icon.svg $controlDir/src/assets/img; cd ../../..;
 cd projects/jde-material/src;
 #addHard _app-theme.scss $controlDir/src;
-#addHardDir highlightjs $controlDir/src;
+addHardDir highlightjs $controlDir/src;
 
 popd > /dev/null;

@@ -1,10 +1,10 @@
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'docs-svg-viewer',
-  template: '<div class="docs-svg-viewer" aria-hidden="true"></div>',
-  standalone: true,
+    selector: 'docs-svg-viewer',
+    template: '<div class="docs-svg-viewer" aria-hidden="true"></div>',
+    standalone: false
 })
 export class SvgViewer implements OnInit {
   @Input() src: string | undefined;

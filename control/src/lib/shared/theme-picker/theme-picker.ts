@@ -22,7 +22,6 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
   styleUrls: ['theme-picker.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [MatButtonModule, MatTooltipModule, MatMenuModule, MatIconModule]
 })
 export class ThemePicker implements OnInit, OnDestroy {

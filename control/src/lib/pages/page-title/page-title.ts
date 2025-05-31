@@ -7,7 +7,7 @@ import {Title} from '@angular/platform-browser';
 @Injectable({providedIn: 'root'})
 export class ComponentPageTitle {
   _title = '';
-  _originalTitle = 'Angular Material UI component library';
+  //_originalTitle = 'Angular Material UI component library';
 
   get title(): string {
     return this._title;
@@ -17,15 +17,15 @@ export class ComponentPageTitle {
     this._title = title;
     if (title !== '') {
       //title = `${title} | Angular Material`;
-			title = title; //
+      title = title; //
     } else {
-      title = this._originalTitle;
+      title = 'Jde';//this._originalTitle;
     }
     this.bodyTitle.setTitle(title);
   }
 	set detail( x:string ){//
-		const main = this.title.includes("|") ? this.title.substring( this.title.lastIndexOf('|') ) : this.title;
-		this.title = `${x} | ${main}`;
+		//const main = this.title?.includes("|") ? this.title.substring( this.title.lastIndexOf('|') ) : this.title;
+		this.title = `${x}`;
  	}
   constructor(private bodyTitle: Title) {}
 }

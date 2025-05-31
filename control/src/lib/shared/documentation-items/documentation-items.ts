@@ -30,6 +30,8 @@ export interface DocItem {
   //overviewPath?: string;
   /** List of additional API docs. */
   //additionalApiDocs?: AdditionalApiDoc[];
+  /** Whether the doc item can display styling information. */
+  //hasStyling?: boolean;
 }
 
 export interface DocSection {
@@ -61,10 +63,9 @@ const DOCS: { [key: string]: DocItem[] } = {
   ],
 };
 
-for( let doc of DOCS[SettingsKey] )
-	{
-		doc.packageName = SettingsKey;
-	}
+for( let doc of DOCS[SettingsKey] ){
+  doc.packageName = SettingsKey;
+}
 
 	const AllSettings = DOCS[SettingsKey];
 	const ALL_DOCS = AllSettings;
@@ -73,9 +74,9 @@ for( let doc of DOCS[SettingsKey] )
 export class DocumentationItems {
 
   getItems(section: string): DocItem[] {
-	  if (section === SettingsKey) {
-			return AllSettings;
-	 	}
+    if (section === SettingsKey) {
+      return AllSettings;
+    }
 /*    if (section === CDK) {
       return ALL_CDK;
     }*/
@@ -93,6 +94,7 @@ export class DocumentationItems {
 function processDocs(packageName: string, docs: DocItem[]): DocItem[] {
   for (const doc of docs) {
     doc.packageName = packageName;
+    doc.hasStyling ??= packageName === 'material';
     doc.examples = exampleNames.filter(key =>
       key.match(RegExp(`^${doc.exampleSpecs.prefix}`)) &&
       !doc.exampleSpecs.exclude?.some(excludeName => key.indexOf(excludeName) === 0));
