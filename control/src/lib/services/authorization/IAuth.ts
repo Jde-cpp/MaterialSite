@@ -11,21 +11,48 @@ export enum EProvider{
 	OpcServer = 7
 };
 
-export type LoggedInUser = {
+export class LoggedInUser{
+	constructor( jwtString:string ){
+		if( !jwtString )
+			return;
+		const jwt = LoggedInUser.decodeJwt( jwtString );
+		this.credential = jwtString;
+		this.email = jwt.email;
+		this.name = jwt.name;
+		this.picture = jwt.picture;
+		this.exp = new Date( jwt.exp * 1000 );
+		if( jwt.iss=="https://accounts.google.com" )
+			this.provider = EProvider.Google;
+	}
+
+	static decodeJwt(idToken: string):any{
+		const base64Url = idToken.split( "." )[1];
+		const base64 = base64Url.replace( /-/g, "+" ).replace( /_/g, "/" );
+		const jsonPayload = decodeURIComponent(
+			window.atob( base64 ).split("")
+				.map( (c)=>"%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2) )
+				.join("")
+		);
+		return JSON.parse( jsonPayload );
+	}
+	toString():string{
+		const { credential, ...rest } = this;
+		return JSON.stringify( rest );
+	}
   id?: string; //loginName
 	authorization?: string; //sessionId
 	credential?: string; //jwt token
 	domain?: string;
-	expiration?: Date;
+	exp?: Date;	//expiration
   email?: string;
 	name?: string;
-  pictureUrl?: string;
+  picture?: string;
 	provider?: EProvider;
 	serverInstances?:{url:string,instance:number}[];
 }
 
 export interface IAuth{
-	loginGoogle( user:LoggedInUser ):Promise<void>;
+	login( user:LoggedInUser ):Promise<void>;
 	loginPassword( username:string, password:string, authenticator:string ):Promise<void>;
 	logout( user:LoggedInUser ):Promise<void>;
 	providers():Promise<EProvider[]>;

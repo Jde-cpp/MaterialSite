@@ -6,7 +6,7 @@ import { EProvider, IAuth, LoggedInUser } from './IAuth';
 export class DisabledAuthService implements IAuth{
 	get enabled():boolean{ return false; }
 //	googleAuthClientId():Promise<string>{ return Promise.resolve(null); }
-	loginGoogle( user:LoggedInUser ):Promise<void>{ throw "noImpl"; }
+	login( user:LoggedInUser ):Promise<void>{ throw "noImpl"; }
 	loginPassword( username:string, password:string, authenticator:string ):Promise<void>{ throw "noImpl"; }
 	logout():Promise<void>{ return Promise.resolve(); }
 	providers():Promise<EProvider[]>{ return Promise.resolve( [] ); }

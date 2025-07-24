@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router, Routes, UrlSegment } from "@angular/router";
-import { DocItem } from 'jde-material';
+import { DocItem } from '../pages/component-sidenav/component-sidenav';
 
 
 export interface IRouteService{
