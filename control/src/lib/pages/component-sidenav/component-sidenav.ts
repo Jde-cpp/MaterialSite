@@ -52,7 +52,7 @@ import { IRouteService, RouteService } from '../../services/IRouteService';
 // src/styles/_constants.scss.
 const EXTRA_SMALL_WIDTH_BREAKPOINT = 720;
 const SMALL_WIDTH_BREAKPOINT = 959;
-export class DocItem{ //
+export class DocItem{
 	constructor( args?:Partial<DocItem>){
 		if( args )
 			Object.assign( this, args );
@@ -141,11 +141,20 @@ export class ComponentSidenav implements OnInit, OnDestroy {
 export class ComponentNav {
   constructor(private router: Router, private route: ActivatedRoute ){
 		effect(() => {
-			this.isLoading.set( this.item()()==null );
+			let loaded = this.item()()!=null;
+			if( loaded ){
+				let segments = this.parentUrl.split( "/" );
+				if( segments[segments.length-1].startsWith(":") ){
+					this.parentUrl = `${segments.slice(0,segments.length-1).join("/")}/${this.item()().parent?.path}`;
+				}
+			}
+			this.isLoading.set( !loaded );
 		});
 	}
   ngOnInit(){
-    this.parentUrl = this.route.routeConfig.path; //appRouting path before children
+		this.route.url.subscribe( (urlSegments) => {
+			this.parentUrl = urlSegments.slice(0, -1).map(segment => segment.path).join('/');
+		});
  	};
   isRoot( url:string ){
     return url==`/${this.parentUrl}` || url.substr( this.parentUrl.length+2 ).indexOf('/')!=-1;

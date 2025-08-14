@@ -31,6 +31,7 @@ export class NavBar implements OnDestroy {
     this.routes = router.config.filter( x=>
 			x.path!="login"
 			&& x.path.indexOf(':target')==-1
+			&& !x.path.includes('/')
 			&& ( !x.children || x.children.find( y=>!y.path.length) )
 		);
 		let dflt = this.routes.find( x=> x.component && x.component.name==router.config.find( x=>!x.path.length )?.component.name );
